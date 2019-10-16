@@ -1,0 +1,24 @@
+pane	0	1	:zsh	0	:	1	:/Users/cmarques	0	zsh	:
+pane	0	1	:zsh	0	:	2	:/Users/cmarques	0	zsh	:
+pane	0	1	:zsh	0	:	3	:/Users/cmarques	1	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	1	:*Z	1	:/Users/cmarques/fc/docker-uk-apps	0	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	1	:*Z	2	:/Users/cmarques/fc/docker-uk-apps	0	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	1	:*Z	3	:/Users/cmarques/fc/documents-analyser	1	zsh	:
+pane	0	3	:docker-uk-apps	0	:-	1	:/Users/cmarques	0	zsh	:
+pane	0	3	:docker-uk-apps	0	:-	2	:/Users/cmarques	1	zsh	:
+pane	0	4	:cassio.marques@bastion-0:~	0	:	1	:/Users/cmarques	1	zsh	:
+pane	1	1	:nvim	1	:*	1	:/Users/cmarques	1	nvim	:nvim config/global_aws_prod
+pane	2	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	5	1	:fca	0	:-	1	:/Users/cmarques/fc/funding_circle_app	1	zsh	:
+pane	5	2	:documents-analyser	1	:*	1	:/Users/cmarques/fc/documents-analyser	1	zsh	:
+pane	base	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+window	0	1	0	:	8203,178x126,0,0[178x62,0,0{89x62,0,0,0,88x62,90,0,2},178x63,0,63,3]
+window	0	2	1	:*Z	9cd1,178x126,0,0[178x28,0,0,4,178x30,0,29,5,178x66,0,60,6]
+window	0	3	0	:-	770a,178x126,0,0[178x62,0,0,7,178x63,0,63,8]
+window	0	4	0	:	a156,178x126,0,0,9
+window	1	1	1	:*	b4fe,318x70,0,0,1
+window	2	1	1	:*	5aaf,318x70,0,0,10
+window	5	1	0	:-	5ab0,318x70,0,0,11
+window	5	2	1	:*	5ab1,318x70,0,0,12
+window	base	1	1	:*	5ab2,318x70,0,0,13
+state	5	1

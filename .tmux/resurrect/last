@@ -1,0 +1,37 @@
+pane	0	1	:cassio.marques@bastion-0:~	1	:*	1	:/Users/cmarques/stuff/phobos	0	zsh	:
+pane	0	1	:cassio.marques@bastion-0:~	1	:*	2	:/Users/cmarques/stuff/phobos	1	ruby	:/Users/cmarques/.rbenv/versions/2.5.1/bin/rspec spec    
+pane	0	2	:zsh	0	:	1	:/Users/cmarques/fc/uk-gateway	1	zsh	:
+pane	0	3	:zsh	0	:-	1	:/Users/cmarques	1	zsh	:nvim appsscript.json
+pane	1	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	2	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	5	1	:phobos	1	:*	1	:/Users/cmarques/stuff/phobos	1	nvim	:nvim .
+pane	5	2	:codas	0	:	1	:/Users/cmarques/fc/codas	1	nvim	:nvim .
+pane	5	3	:documents-manager	0	:	1	:/Users/cmarques/fc/documents-manager	1	nvim	:nvim /Users/cmarques/notes.md
+nvim app
+pane	5	4	:fca	0	:	1	:/Users/cmarques/fc/funding_circle_app	1	nvim	:nvim .
+nvim .
+nvim engines/shared/app/models/account.rb
+pane	5	5	:cvseeds	0	:	1	:/Users/cmarques/fc/cvseeds	1	nvim	:nvim .
+pane	5	6	:alpaca	0	:	1	:/Users/cmarques/fc/funding_circle_app/alpaca	1	nvim	:nvim .
+pane	5	7	:originations-api-ruby	0	:-	1	:/Users/cmarques/fc/originations-api-ruby	1	zsh	:
+pane	5	8	:zsh	0	:	1	:/Users/cmarques/fc/originations-api-ruby	1	zsh	:
+pane	5	8	:zsh	0	:	2	:/Users/cmarques/fc/originations-api-ruby	0	watch	:watch curl -X GET http://localhost:3000/api/v1/loan_applications/0333242a-ee8f-4365-a2e8-ad284d289dac/next_action
+pane	6	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	6	1	:zsh	1	:*	2	:/Users/cmarques	0	zsh	:
+pane	base	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+window	0	1	1	:*	28a6,278x68,0,0{138x68,0,0,60,139x68,139,0,65}
+window	0	2	0	:	d462,278x68,0,0,5
+window	0	3	0	:-	6a68,278x68,0,0,38
+window	1	1	1	:*	9f53,178x135,0,0,6
+window	2	1	1	:*	9f54,178x135,0,0,7
+window	5	1	1	:*	d465,278x68,0,0,8
+window	5	2	0	:	6a5f,278x68,0,0,10
+window	5	3	0	:	6a60,278x68,0,0,11
+window	5	4	0	:	6a61,278x68,0,0,12
+window	5	5	0	:	6a62,278x68,0,0,13
+window	5	6	0	:	6a63,278x68,0,0,14
+window	5	7	0	:-	6a62,278x68,0,0,32
+window	5	8	0	:	83e3,278x68,0,0[278x34,0,0,46,278x33,0,35,62]
+window	6	1	1	:*	5454,80x24,0,0[80x11,0,0,15,80x12,0,12,43]
+window	base	1	1	:*	4fdd,178x135,0,0,16
+state	0	

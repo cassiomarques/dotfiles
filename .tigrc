@@ -1,1 +1,3 @@
 set vertical-split = false
+set status-show-untracked-dirs = true
+set status-show-untracked-files = true

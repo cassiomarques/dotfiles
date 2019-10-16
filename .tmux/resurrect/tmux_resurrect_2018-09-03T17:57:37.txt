@@ -1,0 +1,34 @@
+pane	0	1	:zsh	1	:*Z	1	:/Users/cmarques	0	zsh	:
+pane	0	1	:zsh	1	:*Z	2	:/Users/cmarques/fc/us-blackbox	0	zsh	:
+pane	0	1	:zsh	1	:*Z	3	:/Users/cmarques/fc/us-blackbox	1	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	0	:-Z	1	:/Users/cmarques/fc/funding_circle_app	0	nvim	:nvim .
+pane	0	2	:cassio.marques@bastion-0:~	0	:-Z	2	:/Users/cmarques/fc/loan_fuel	0	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	0	:-Z	3	:/Users/cmarques/fc/documents-analyser	0	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	0	:-Z	4	:/Users/cmarques	1	zsh	:
+pane	0	3	:zsh	0	:	1	:/Users/cmarques/fc/uk-gateway	1	zsh	:
+pane	1	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	2	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	5	1	:fca	0	:	1	:/Users/cmarques/fc/funding_circle_app	1	nvim	:nvim .
+pane	5	2	:documents-analyser	0	:	1	:/Users/cmarques/fc/documents-analyser	1	nvim	:nvim .
+pane	5	3	:admin.js	1	:*	1	:/Users/cmarques/fc/admin.js	1	nvim	:nvim .
+pane	5	4	:loan_fuel	0	:	1	:/Users/cmarques/fc/loan_fuel	1	zsh	:
+pane	5	5	:cvseeds	0	:	1	:/Users/cmarques/fc/cvseeds	1	zsh	:
+pane	5	6	:us-smoke-tests	0	:-	1	:/Users/cmarques/fc/us-blackbox	1	nvim	:nvim .
+pane	5	7	:us-direct-borrower	0	:	1	:/Users/cmarques/fc/us-direct-borrower	1	zsh	:
+pane	5	8	:nvim	0	:	1	:/Users/cmarques/fc/admin.js	1	zsh	:
+pane	base	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+window	0	1	1	:*Z	99af,178x126,0,0[178x42,0,0,1,178x40,0,43,2,178x42,0,84,3]
+window	0	2	0	:-Z	5a8d,178x126,0,0[178x37,0,0,4,178x27,0,38,5,178x29,0,66,6,178x30,0,96,7]
+window	0	3	0	:	a155,178x126,0,0,8
+window	1	1	1	:*	d466,278x68,0,0,9
+window	2	1	1	:*	6a5f,278x68,0,0,10
+window	5	1	0	:	5ab0,318x70,0,0,11
+window	5	2	0	:	5ab1,318x70,0,0,12
+window	5	3	1	:*	5ab2,318x70,0,0,13
+window	5	4	0	:	5ab3,318x70,0,0,14
+window	5	5	0	:	5ab4,318x70,0,0,15
+window	5	6	0	:-	5ab5,318x70,0,0,16
+window	5	7	0	:	5ab6,318x70,0,0,17
+window	5	8	0	:	5ab7,318x70,0,0,18
+window	base	1	1	:*	6a68,278x68,0,0,19
+state	5	

@@ -1,0 +1,12 @@
+GTAGS
+GTAGS
+GPATH
+GRTAGS
+tags
+.#*
+.DS_Store
+*.DS_Store
+vendor/lib/pi/pi
+ZEUS.LOG
+.env.development.local
+.env.test.local

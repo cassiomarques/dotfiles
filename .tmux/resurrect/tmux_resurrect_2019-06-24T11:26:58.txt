@@ -1,0 +1,31 @@
+pane	0	1	:zsh	1	:*Z	1	:/Users/cmarques/fc/docker-uk-apps	1	zsh	:
+pane	0	1	:zsh	1	:*Z	2	:/Users/cmarques/fc/documents-manager	0	zsh	:
+pane	0	2	:cassio.marques@bastion-0:~	0	:-	1	:/Users/cmarques/fc/documents-manager	1	nvim	:nvim
+pane	0	2	:cassio.marques@bastion-0:~	0	:-	2	:/Users/cmarques/fc/documents-analyser	0	zsh	:
+pane	0	3	:zsh	0	:	1	:/Users/cmarques/fc/uk-gateway	1	zsh	:
+pane	1	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	2	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	5	1	:documents-analyser	0	:-	1	:/Users/cmarques/fc/documents-analyser	1	nvim	:nvim .
+pane	5	2	:ocrolus-connector	0	:	1	:/Users/cmarques/fc/ocrolus-connector	1	nvim	:nvim .
+pane	5	3	:loan_fuel	0	:	1	:/Users/cmarques/fc/loan_fuel	1	nvim	:nvim .
+pane	5	4	:documents-manager	0	:	1	:/Users/cmarques/fc/documents-manager	1	nvim	:nvim .
+pane	5	5	:FCA	1	:*	1	:/Users/cmarques/fc/funding_circle_app	1	nvim	:nvim .
+pane	5	6	:cvseeds	0	:	1	:/Users/cmarques/fc/cvseeds	1	nvim	:nvim .
+pane	5	7	:clojure	0	:	1	:/Users/cmarques/stuff/clojure	1	nvim	:nvim foo.clj
+pane	6	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+pane	base	1	:zsh	1	:*	1	:/Users/cmarques	1	zsh	:
+window	0	1	1	:*Z	fbc7,178x126,0,0[178x62,0,0,1,178x63,0,63,18]
+window	0	2	0	:-	9181,178x126,0,0[178x88,0,0,3,178x37,0,89,4]
+window	0	3	0	:	a152,178x126,0,0,5
+window	1	1	1	:*	b503,318x70,0,0,6
+window	2	1	1	:*	b504,318x70,0,0,7
+window	5	1	0	:-	b505,318x70,0,0,8
+window	5	2	0	:	b506,318x70,0,0,9
+window	5	3	0	:	5aaf,318x70,0,0,10
+window	5	4	0	:	5ab0,318x70,0,0,11
+window	5	5	1	:*	5ab1,318x70,0,0,12
+window	5	6	0	:	5ab2,318x70,0,0,13
+window	5	7	0	:	5ab8,318x70,0,0,19
+window	6	1	1	:*	5ab3,318x70,0,0,14
+window	base	1	1	:*	5ab4,318x70,0,0,15
+state	5	0

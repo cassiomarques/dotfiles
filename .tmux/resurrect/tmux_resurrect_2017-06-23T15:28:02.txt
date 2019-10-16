@@ -1,0 +1,23 @@
+pane	0	1	:root@ip-10-54-32-156:~	0	:Z	1	:/Users/cassiommc/stuff/interview-exercises/jabawack81/prime_table	0	zsh	:
+pane	0	1	:root@ip-10-54-32-156:~	0	:Z	2	:/Users/cassiommc	1	zsh	:
+pane	0	2	:fca-frontend	1	:*Z	1	:/Users/cassiommc/fc/alpaca	0	zsh	:
+pane	0	2	:fca-frontend	1	:*Z	2	:/Users/cassiommc/fc/alpaca	0	zsh	:
+pane	0	2	:fca-frontend	1	:*Z	3	:/Users/cassiommc/fc/fca-frontend	1	zsh	:
+pane	0	3	:root@jenkins-docker1:~	0	:	1	:/Users/cassiommc/fc/funding_circle_app	0	zeus-darwin-amd	:/Users/cassiommc/.rbenv/versions/2.2.5/lib/ruby/gems/2.2.0/gems/zeus-0.15.13/build/zeus-darwin-amd64 start
+pane	0	3	:root@jenkins-docker1:~	0	:	2	:/Users/cassiommc/fc/funding_circle_app	0	zsh	:
+pane	0	3	:root@jenkins-docker1:~	0	:	3	:/Users/cassiommc/fc/funding_circle_app	1	psql	:psql -U postgres -h 192.168.99.100 -d fundingcircle
+pane	0	4	:Cukes	0	:	1	:/Users/cassiommc/fc/blackbox-cukes	1	zsh	:
+pane	0	5	:UAT	0	:-	1	:/Users/cassiommc/fc/docker-uk-apps	0	zsh	:
+pane	0	5	:UAT	0	:-	2	:/Users/cassiommc/fc/docker-uk-apps	1	ruby	:ruby ./bin/fcd logs -f fcarails
+pane	0	6	:RSS	0	:	1	:/Users/cassiommc	1	zsh	:
+pane	0	7	:zsh	0	:	1	:/Users/cassiommc	1	zsh	:
+pane	base	1	:zsh	1	:*	1	:/Users/cassiommc	1	zsh	:
+window	0	1	0	:Z	42fe,178x135,0,0[178x67,0,0,2,178x67,0,68,3]
+window	0	2	1	:*Z	4fd1,178x135,0,0[178x67,0,0{89x67,0,0,4,88x67,90,0,5},178x67,0,68,6]
+window	0	3	0	:	417b,178x135,0,0[178x23,0,0,17,178x51,0,24,20,178x59,0,76,21]
+window	0	4	0	:	4fd7,178x135,0,0,10
+window	0	5	0	:-	c684,178x135,0,0[178x67,0,0,11,178x67,0,68,12]
+window	0	6	0	:	4fda,178x135,0,0,13
+window	0	7	0	:	4fdf,178x135,0,0,18
+window	base	1	1	:*	4fdb,178x135,0,0,14
+state	0	

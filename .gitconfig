@@ -1,10 +1,10 @@
 [core]
-  editor = mvim -v -u NONE
-	excludesfile = /Users/cassiommc/.gitignore_global
+  editor = nvim
+	excludesfile = /Users/cmarques/.gitignore_global
 
 [user]
 	name = Cássio Marques
-	email = cassiommc@gmail.com
+	email = cassio.marques@fundingcircle.com
 
 [alias]
   ci = commit
@@ -26,9 +26,6 @@
   color = auto
 [push]
   default = matching
-[github]
-  token = dca317e4f48fb14b51a1df8923d0ad5c
-  user = cassiomarques
 
 [color]
   ui = auto
@@ -57,11 +54,13 @@
 		File.open(%(%A), %(w)) {|f| f.write(b)}\n\
 		exit 1 if b.include?(%(<)*%L)'"
 
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
 [http]
 	proxy =
+
+[commit]
+	template = /Users/cmarques/commit_message_template.txt
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process

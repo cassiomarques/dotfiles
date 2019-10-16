@@ -1,103 +1,122 @@
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="cassiomarques"
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
 
-LANG=en_AU.UTF-8
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="robbyrussell"
 
-# Set to this to use case-sensitive completion
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Comment this out to disable weekly auto-update checks
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
-# Uncomment following line if you want to disable colors in ls
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
+# Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
-# Uncomment following line if you want to disable autosetting terminal title.
-DISABLE_AUTO_TITLE="true"
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-# Uncomment following line if you want red dots to be displayed while waiting for completion
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git gem lein)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git autojump)
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
-# export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH:/opt/local/bin:/opt/local/sbin:/Users/cassiommc/.rvm/gems/ruby-1.9.2-p180/bin:/Users/cassiommc/.rvm/gems/ruby-1.9.2-p180@global/bin:/Users/cassiommc/.rvm/rubies/ruby-1.9.2-p180/bin:/Users/cassiommc/.rvm/bin:~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH:/opt/local/bin:/opt/local/sbin:~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
+# User configuration
 
-# REE
-export RUBY_HEAP_MIN_SLOTS=1000000
-export RUBY_HEAP_SLOTS_INCREMENT=1000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-export RUBY_GC_MALLOC_LIMIT=1000000000
-export RUBY_HEAP_FREE_MIN=500000
+# export MANPATH="/usr/local/man:$MANPATH"
 
-export RESQUE_AUTH=123456
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 
-export USE_JASMINE_RAKE=true
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
-# Aliases
-# misc
-alias vim="mvim -v"
-# alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-export GEM_EDITOR="mvim -v"
-export EDITOR="mvim -v"
-alias cshdb="psql -U postgres -h 10.10.1.9 -d csh"
-alias csldb="psql -U postgres -h 10.10.1.9 -d csl"
+reset-ssh () {
+  eval "$(ssh-agent)"
+  ssh-add ~/.ssh/github_id_rsa
+  ssh-add ~/.ssh/fc_id_rsa
+}
 
-# git
-alias gl='git log --graph --pretty=format:'\''%Cred%h%Creset -%C(yellow)%d%Creset %Cblue%an%Creset - %s %Cgreen(%cr)%Creset'\'' --abbrev-commit --date=relative'
-alias ga='git add .'
-alias gs='git status'
-alias gp='git push'
-alias gd="git diff"
+change-branch () {
+  git co $(git branch | peco)
+}
 
-# tig
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ts="tig status"
-
-# Rails 2
-alias ss="script/server"
-alias sc="script/console"
-alias db="script/dbconsole"
-
-# Rails 3
-alias rc="rails console"
-alias rs="rails server"
-alias rdb="rails dbconsole"
-alias migrate="bundle exec rake db:migrate db:test:prepare"
-alias pryr="bundle exec pry -r './config/environment'"
-
-# SHH
-alias ebb="cd ~/dev/shh/eblood_blood_bank"
-alias elab="cd ~/dev/shh/eblood_laboratories"
-
-# Leiningen (Clojure)
-alias lein='nocorrect lein'
-
-alias spin="nocorrect spin"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
-# rvm use default
-
-#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-# Zeus aliases
-alias zspec="zeus rspec"
-alias zserver="zeus server"
-alias zake="zeus rake"
-alias zgen="zeus rails g"
-
-# Ruby stuff aliases
+alias vim=nvim
+alias cb=change-branch
+alias b="bundle install"
 alias be="bundle exec"
-alias b="bundle"
-alias bspec="bundle exec rspec"
 
+source ~/.zshenv
+eval "$(rbenv init -)"
+
+# NVM configuration (Node version manager)
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion

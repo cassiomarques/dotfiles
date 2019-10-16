@@ -1,0 +1,22 @@
+pane	0	1	:cmarques@bilcas-01:~	0	:Z	1	:/Users/cassiommc	0	zsh	:
+pane	0	1	:cmarques@bilcas-01:~	0	:Z	2	:/Users/cassiommc	0	zsh	:
+pane	0	1	:cmarques@bilcas-01:~	0	:Z	3	:/Users/cassiommc	1	zsh	:
+pane	0	2	:Alpaca	1	:*Z	1	:/Users/cassiommc/fc/alpaca	0	zsh	:
+pane	0	2	:Alpaca	1	:*Z	2	:/Users/cassiommc/fc/alpaca	0	zsh	:
+pane	0	2	:Alpaca	1	:*Z	3	:/Users/cassiommc/fc/alpaca	1	zsh	:
+pane	0	3	:FCA	0	:-Z	1	:/Users/cassiommc/fc/funding_circle_app	0	zeus-darwin-amd	:/Users/cassiommc/.rbenv/versions/2.2.5/lib/ruby/gems/2.2.0/gems/zeus-0.15.13/build/zeus-darwin-amd64 start
+pane	0	3	:FCA	0	:-Z	2	:/Users/cassiommc/fc/funding_circle_app	0	zeus-darwin-amd	:/Users/cassiommc/.rbenv/versions/2.2.5/lib/ruby/gems/2.2.0/gems/zeus-0.15.13/build/zeus-darwin-amd64 s
+pane	0	3	:FCA	0	:-Z	3	:/Users/cassiommc/fc/fca-frontend	1	zsh	:
+pane	0	4	:Cukes	0	:	1	:/Users/cassiommc/fc/blackbox-cukes	1	zsh	:
+pane	0	5	:UAT	0	:	1	:/Users/cassiommc/fc/docker-uk-apps	0	zsh	:
+pane	0	5	:UAT	0	:	2	:/Users/cassiommc/fc/docker-uk-apps	1	zsh	:
+pane	0	6	:RSS	0	:	1	:/Users/cassiommc	1	zsh	:
+pane	base	1	:zsh	1	:*	1	:/Users/cassiommc	1	zsh	:
+window	0	1	0	:Z	baaf,178x135,0,0[178x67,0,0,1,178x67,0,68{89x67,0,68,2,88x67,90,68,3}]
+window	0	2	1	:*Z	4fd1,178x135,0,0[178x67,0,0{89x67,0,0,4,88x67,90,0,5},178x67,0,68,6]
+window	0	3	0	:-Z	1bc3,178x135,0,0[178x76,0,0,7,178x58,0,77{89x58,0,77,8,88x58,90,77,15}]
+window	0	4	0	:	9f56,178x135,0,0,9
+window	0	5	0	:	4683,178x135,0,0[178x67,0,0,10,178x67,0,68,11]
+window	0	6	0	:	4fd9,178x135,0,0,12
+window	base	1	1	:*	6162,278x73,0,0,13
+state	0	base

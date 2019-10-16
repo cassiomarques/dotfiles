@@ -1,0 +1,20 @@
+pane	0	1	:Stuff	0	:	1	:/Users/cassiommc	1	zsh	:
+pane	0	2	:Alpaca	0	:Z	1	:/Users/cassiommc/fc/alpaca	0	zeus-darwin-amd	:/Users/cassiommc/.rbenv/versions/2.0.0-p353/lib/ruby/gems/2.0.0/gems/zeus-0.15.4/build/zeus-darwin-amd64 start
+pane	0	2	:Alpaca	0	:Z	2	:/Users/cassiommc/fc/alpaca	0	tail	:tail -f log/test.gelf.log
+jq
+pane	0	2	:Alpaca	0	:Z	3	:/Users/cassiommc/fc/alpaca	1	zsh	:
+pane	0	2	:Alpaca	0	:Z	4	:/Users/cassiommc/fc/alpaca	0	zsh	:
+pane	0	3	:FCA	0	:Z	1	:/Users/cassiommc/fc/funding_circle_app	0	zeus-darwin-amd	:/Users/cassiommc/.rbenv/versions/2.2.5/lib/ruby/gems/2.2.0/gems/zeus-0.15.10/build/zeus-darwin-amd64 start
+pane	0	3	:FCA	0	:Z	2	:/Users/cassiommc/fc/funding_circle_app	1	zsh	:
+pane	0	4	:Cukes	1	:*	1	:/Users/cassiommc/fc/blackbox-cukes	1	zsh	:
+pane	0	5	:Loan Engine	0	:	1	:/Users/cassiommc/fc/loan_engine	1	zsh	:
+pane	0	6	:UAT	0	:-Z	1	:/Users/cassiommc/fc/docker-uk-apps	0	zsh	:
+pane	0	6	:UAT	0	:-Z	2	:/Users/cassiommc/fc/docker-uk-apps	1	zsh	:
+pane	0	6	:UAT	0	:-Z	3	:/Users/cassiommc/fc/docker-uk-apps	0	ruby	:ruby ./bin/fcd bash fcarails
+window	0	1	0	:	c900,318x75,0,0,3
+window	0	2	0	:Z	def0,318x75,0,0[318x37,0,0{159x37,0,0,1,158x37,160,0,6},318x37,0,38{159x37,0,38,5,158x37,160,38,7}]
+window	0	3	0	:Z	37a0,318x75,0,0[318x37,0,0,0,318x37,0,38,10]
+window	0	4	1	:*	c901,318x75,0,0,4
+window	0	5	0	:	64b0,318x75,0,0,11
+window	0	6	0	:-Z	559a,318x75,0,0[318x37,0,0,2,318x37,0,38{159x37,0,38,8,158x37,160,38,9}]
+state	0	
