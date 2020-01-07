@@ -15,10 +15,11 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'vim-scripts/CSApprox'
 Plug 'rking/ag.vim'
+Plug 'Yggdroot/LeaderF'
 Plug 'vim-scripts/Align'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'bkad/CamelCaseMotion'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-endwise'
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -60,6 +61,14 @@ Plug 'tpope/vim-classpath'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'guns/vim-sexp',    {'for': 'clojure'}
 Plug 'liquidz/vim-iced', {'for': 'clojure'}
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'tpope/vim-rbenv'
+Plug 'kassio/neoterm'
+" Java Stuff :scream:
+Plug 'artur-shaik/vim-javacomplete2'
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -84,6 +93,7 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType ruby,perl,tex set shiftwidth=2
 autocmd FileType c,cpp,java,javascript,python,xml,xhtml,html set shiftwidth=2
 autocmd FileType javascript set shiftwidth=2
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 " Removes trailing spaces when saving the buffer
 autocmd BufWritePre * :%s/\s\+$//e
@@ -170,14 +180,14 @@ runtime! plugin/matchit.vim
 runtime! macros/matchit.vim
 
 "Ctrl-P
-let g:ctrlp_dotfiles = 0
-let g:ctrlp_map = '<leader>p'
-let g:ctrlp_max_files = 0
-
-let g:ctrlp_custom_ignore = {'file': '\.git$\|\.hg$\|\.svn$\|\.beam$\|DS_Store', 'dir': '\v[\/](coverage|_build|node_modules)$', 'link': '',}
-let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files']
-let g:ctrlp_user_command = ['.hg/', 'hg --cwd %s locate -I .']
-let g:ctrlp_open_new_file = 't'
+" let g:ctrlp_dotfiles = 0
+" let g:ctrlp_map = '<leader>p'
+" let g:ctrlp_max_files = 0
+"
+" let g:ctrlp_custom_ignore = {'file': '\.git$\|\.hg$\|\.svn$\|\.beam$\|DS_Store', 'dir': '\v[\/](coverage|_build|node_modules)$', 'link': '',}
+" let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files']
+" let g:ctrlp_user_command = ['.hg/', 'hg --cwd %s locate -I .']
+" let g:ctrlp_open_new_file = 't'
 
 " Vim Airline Settings
 let g:airline_powerline_fonts = 1
@@ -210,6 +220,42 @@ nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
 " vim-iced configuration
 let g:iced_enable_default_key_mappings = v:true
+
+"""""""""""""""""""
+" LeaderF config
+""""""""""""""""""
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_CommandMap = {'<C-K>': ['<Up>'], '<C-J>': ['<Down>']}
+" don't show the help in normal mode
+let g:Lf_HideHelp = 1
+let g:Lf_UseCache = 0
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+" popup mode
+let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+
+let g:Lf_ShortcutF = "<leader>p"
+noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+
+noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" search visually selected text literally
+xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+noremap go :<C-U>Leaderf! rg --recall<CR>
+
+" should use `Leaderf gtags --update` first
+let g:Lf_GtagsAutoGenerate = 0
+let g:Lf_Gtagslabel = 'native-pygments'
+noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
 "=====================================================================
 " Colorscheme, Tmux, etc
@@ -262,6 +308,7 @@ endif
 set history=256  " Number of things to remember in history.
 set autowrite  " Writes on make/shell commands
 set nu  " Line numbers on
+set number
 set nowrap  " Line wrapping off
 set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 set ignorecase smartcase

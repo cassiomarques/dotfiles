@@ -113,6 +113,23 @@ alias cb=change-branch
 alias b="bundle install"
 alias be="bundle exec"
 
+mesosslave-admin () {
+  sft list-servers --project $1 | grep mesosslave-admin | awk '/mesosslave-admin/{print $1}'
+}
+
+alias ssh-uk-uat='ssh "$(mesosslave-admin eu-west-1-uat)"'
+alias ssh-uk-stg='ssh "$(mesosslave-admin eu-west-1-staging)"'
+alias ssh-uk-prd='ssh "$(mesosslave-admin eu-west-1-production)"'
+alias ssh-us-uat='ssh "$(mesosslave-admin us-east-1-uat)"'
+alias ssh-us-stg='ssh "$(mesosslave-admin us-east-1-staging)"'
+alias ssh-us-prd='ssh "$(mesosslave-admin us-east-1-production)"'
+
+# Cursor word navigation that does not conflict with macos "workspace swapping" (ctrl-arrow)
+# This uses ALT + arrow
+bindkey -e
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+
 source ~/.zshenv
 eval "$(rbenv init -)"
 
