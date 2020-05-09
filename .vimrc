@@ -19,11 +19,10 @@ Plug 'Yggdroot/LeaderF'
 Plug 'vim-scripts/Align'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'bkad/CamelCaseMotion'
-" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-endwise'
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'mxw/vim-jsx'
+Plug 'othree/yajs.vim'
+Plug 'maxmellon/vim-jsx-pretty'
 Plug 'tpope/vim-markdown'
 Plug 'tmhedberg/matchit'
 Plug 'tpope/vim-rails'
@@ -69,6 +68,7 @@ Plug 'tpope/vim-rbenv'
 Plug 'kassio/neoterm'
 " Java Stuff :scream:
 Plug 'artur-shaik/vim-javacomplete2'
+Plug 'google/vim-jsonnet'
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -88,12 +88,12 @@ call plug#end()
 syntax on                 " Enable syntax highlighting
 filetype plugin indent on " Enable filetype-specific indenting and plugins
 
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType c set omnifunc=ccomplete#Complete
+" autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType ruby,perl,tex set shiftwidth=2
 autocmd FileType c,cpp,java,javascript,python,xml,xhtml,html set shiftwidth=2
 autocmd FileType javascript set shiftwidth=2
-autocmd FileType java setlocal omnifunc=javacomplete#Complete
+" autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 " Removes trailing spaces when saving the buffer
 autocmd BufWritePre * :%s/\s\+$//e
@@ -179,16 +179,6 @@ endif
 runtime! plugin/matchit.vim
 runtime! macros/matchit.vim
 
-"Ctrl-P
-" let g:ctrlp_dotfiles = 0
-" let g:ctrlp_map = '<leader>p'
-" let g:ctrlp_max_files = 0
-"
-" let g:ctrlp_custom_ignore = {'file': '\.git$\|\.hg$\|\.svn$\|\.beam$\|DS_Store', 'dir': '\v[\/](coverage|_build|node_modules)$', 'link': '',}
-" let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files']
-" let g:ctrlp_user_command = ['.hg/', 'hg --cwd %s locate -I .']
-" let g:ctrlp_open_new_file = 't'
-
 " Vim Airline Settings
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -260,8 +250,10 @@ noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 "=====================================================================
 " Colorscheme, Tmux, etc
 "=====================================================================
-set background=dark
-colorscheme Tomorrow-Night-Eighties
+" set background=dark
+set background=light
+" colorscheme Tomorrow-Night-Eighties
+colorscheme PaperColor
 
 if exists('$TMUX')
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
