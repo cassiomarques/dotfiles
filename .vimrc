@@ -3,10 +3,6 @@ set nocompatible              " be iMproved, required
 let g:python_host_prog = '/Users/cmarques/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = '/Users/cmarques/.pyenv/versions/neovim3/bin/python'
 
-"Ale (linters, etc)
-let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 600
-
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -38,7 +34,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
 Plug 'flazz/vim-colorschemes'                             " Lots of colorschemes
 Plug 'edkolev/tmuxline.vim'
-Plug 'janko-m/vim-test'
+" Plug 'janko-m/vim-test'
+Plug 'thoughtbot/vim-rspec'
+Plug 'jgdavey/tslime.vim'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'roxma/vim-tmux-clipboard'
@@ -51,6 +49,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'kchmck/vim-coffee-script'
 Plug 'leafgarland/typescript-vim'
 Plug 'hashivim/vim-terraform'
+Plug 'mattn/emmet-vim'
 " Clojure stuff
 " Plug 'tpope/vim-salve'
 " Plug 'tpope/vim-projectionist'
@@ -87,6 +86,24 @@ call plug#end()
 
 syntax on                 " Enable syntax highlighting
 filetype plugin indent on " Enable filetype-specific indenting and plugins
+
+"Ale (linters, etc)
+let g:ale_lint_on_text_changed = 'always'
+let g:ale_lint_delay = 600
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\   'vue': ['eslint'],
+\   'react': ['eslint']
+\}
+let g:ale_fixers = {
+  \    'javascript': ['eslint'],
+  \    'typescript': ['prettier', 'tslint'],
+  \    'vue': ['eslint'],
+  \    'scss': ['prettier'],
+  \    'html': ['prettier'],
+  \    'reason': ['refmt']
+\}
+let g:ale_fix_on_save = 1
 
 " autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 " autocmd FileType c set omnifunc=ccomplete#Complete
@@ -185,13 +202,20 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 
+" vim-rspec mappings
+let g:tslime_always_current_session = 1
+let g:rspec_command = 'call Send_to_Tmux("be rspec {spec}\n")'
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
 " vim-test settings
-let test#strategy = "neovim"
-nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
-" nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
-nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
-nmap <silent> t<C-l> :TestLast<CR>    " t Ctrl+l
-nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
+" let test#strategy = "neovim"
+" nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
+" " nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
+" nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
+" nmap <silent> t<C-l> :TestLast<CR>    " t Ctrl+l
+" nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
 
 " Open alternate files (uses the "alt" program)
 " Run a given vim command on the results of alt from a given path.
@@ -246,6 +270,9 @@ noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand
 noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
 noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
 noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+" With this, triggering emmet auto generation of HTML markup becomes Ctrl-e,
+let g:user_emmet_leader_key='<C-E>'
 
 "=====================================================================
 " Colorscheme, Tmux, etc
