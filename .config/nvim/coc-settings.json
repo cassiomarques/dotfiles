@@ -1,0 +1,5 @@
+{
+    "coc.source.iced.enable": true,
+    "diagnostic.displayByAle": true,
+    "suggest.autoTrigger": "none"
+}

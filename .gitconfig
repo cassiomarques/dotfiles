@@ -58,9 +58,10 @@
 	proxy =
 
 [commit]
-	template = /Users/cmarques/commit_message_template.txt
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[pull]
+	ff = only

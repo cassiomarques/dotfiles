@@ -1,7 +1,7 @@
 set nocompatible              " be iMproved, required
 
-let g:python_host_prog = '/Users/cmarques/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = '/Users/cmarques/.pyenv/versions/neovim3/bin/python'
+let g:python_host_prog = '/Users/cassio.marques/.pyenv/versions/3.7.3/bin/python'
+" let g:python3_host_prog = '/Users/cassio.marques/.pyenv/versions/neovim3/bin/python'
 
 
 " Specify a directory for plugins
@@ -56,9 +56,10 @@ Plug 'mattn/emmet-vim'
 " Plug 'tpope/vim-dispatch'
 " Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-classpath'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'guns/vim-sexp',    {'for': 'clojure'}
-Plug 'liquidz/vim-iced', {'for': 'clojure'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'guns/vim-sexp',    {'for': 'clojure'}
+" Plug 'liquidz/vim-iced', {'for': 'clojure'}
+" Plug 'liquidz/vim-iced-coc-source', {'for': 'clojure'}
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'prabirshrestha/async.vim'
@@ -68,6 +69,8 @@ Plug 'kassio/neoterm'
 " Java Stuff :scream:
 Plug 'artur-shaik/vim-javacomplete2'
 Plug 'google/vim-jsonnet'
+Plug 'ekalinin/Dockerfile.vim'
+" Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -83,6 +86,17 @@ Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
 " Initialize plugin system
 call plug#end()
+
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
 
 syntax on                 " Enable syntax highlighting
 filetype plugin indent on " Enable filetype-specific indenting and plugins
@@ -104,6 +118,8 @@ let g:ale_fixers = {
   \    'reason': ['refmt']
 \}
 let g:ale_fix_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 
 " autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 " autocmd FileType c set omnifunc=ccomplete#Complete
@@ -114,6 +130,11 @@ autocmd FileType javascript set shiftwidth=2
 
 " Removes trailing spaces when saving the buffer
 autocmd BufWritePre * :%s/\s\+$//e
+
+" Automatically format Elixir files when saving.
+" Commenting out for now because it can be a bit slow and I
+" save compulsively...
+" autocmd BufWritePost *.exs,*.ex silent :!mix format %
 
 augroup filetypedetect
   au! BufNewFile,BufRead *.ch setf cheat
@@ -135,6 +156,11 @@ augroup END
 "=====================================================================
 " MAPPINGS
 "=====================================================================
+" Sniprun mappings (to run code from Vim)
+" nmap <leader>ff <Plug>SnipRun
+" nmap <leader>f <Plug>SnipRunOperator
+" vmap f <Plug>SnipRun
+
 " Remove search highlighting with <ENTER>
 :nnoremap <Space> :nohlsearch<cr>
 
@@ -274,13 +300,16 @@ noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 " With this, triggering emmet auto generation of HTML markup becomes Ctrl-e,
 let g:user_emmet_leader_key='<C-E>'
 
+" Markdown composer config
+let g:markdown_composer_autostart = 0
+
 "=====================================================================
 " Colorscheme, Tmux, etc
 "=====================================================================
-" set background=dark
-set background=light
-" colorscheme Tomorrow-Night-Eighties
-colorscheme PaperColor
+set background=dark
+" set background=light
+colorscheme Tomorrow-Night-Eighties
+" colorscheme PaperColor
 
 if exists('$TMUX')
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
