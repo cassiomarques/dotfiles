@@ -69,7 +69,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump)
+plugins=(git autojump asdf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -86,12 +86,6 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
-
-reset-ssh () {
-  eval "$(ssh-agent)"
-  ssh-add ~/.ssh/github_id_rsa
-  ssh-add ~/.ssh/fc_id_rsa
-}
 
 change-branch () {
   git co $(git branch | peco)
@@ -118,13 +112,6 @@ mesosslave-admin () {
   sft list-servers --project $1 | grep mesosslave-admin | awk '/mesosslave-admin/{print $1}'
 }
 
-alias ssh-uk-uat='ssh "$(mesosslave-admin eu-west-1-uat)"'
-alias ssh-uk-stg='ssh "$(mesosslave-admin eu-west-1-staging)"'
-alias ssh-uk-prd='ssh "$(mesosslave-admin eu-west-1-production)"'
-alias ssh-us-uat='ssh "$(mesosslave-admin us-east-1-uat)"'
-alias ssh-us-stg='ssh "$(mesosslave-admin us-east-1-staging)"'
-alias ssh-us-prd='ssh "$(mesosslave-admin us-east-1-production)"'
-
 # Cursor word navigation that does not conflict with macos "workspace swapping" (ctrl-arrow)
 # This uses ALT + arrow
 bindkey -e
@@ -133,7 +120,7 @@ bindkey '^[[1;3D' backward-word
 
 source ~/.zshenv
 
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
 
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
@@ -142,10 +129,9 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-# NVM configuration (Node version manager)
 export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 if [ -d /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 
@@ -154,6 +140,7 @@ fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
 autoload -Uz compinit
 compinit
+
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
