@@ -1,8 +1,7 @@
 set nocompatible              " be iMproved, required
 
-let g:python_host_prog = '/Users/cassio.marques/.pyenv/versions/3.7.3/bin/python'
-" let g:python3_host_prog = '/Users/cassio.marques/.pyenv/versions/neovim3/bin/python'
-
+" let g:python3_host_prog = '/Users/cassio.marques/.pyenv/versions/3.9.1/bin/python'
+let g:python3_host_prog = '/Users/cassio.marques/.pyenv/versions/3.8.5/bin/python'
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -11,30 +10,29 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'vim-scripts/CSApprox'
 Plug 'rking/ag.vim'
-Plug 'Yggdroot/LeaderF'
+" Plug 'Yggdroot/LeaderF'
 Plug 'vim-scripts/Align'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'bkad/CamelCaseMotion'
 Plug 'bling/vim-airline'
+Plug 'edkolev/tmuxline.vim'
 Plug 'tpope/vim-endwise'
 Plug 'othree/yajs.vim'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'lifepillar/pgsql.vim'
 Plug 'tpope/vim-markdown'
 Plug 'tmhedberg/matchit'
 Plug 'tpope/vim-rails'
 Plug 'tomtom/tcomment_vim'
-Plug 'dgrnbrg/vim-redl'
 Plug 'tpope/vim-fugitive'                                 " Git stuff
 Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-dispatch'
-Plug 'radenling/vim-dispatch-neovim'
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'gcmt/wildfire.vim'                                  " Select blocks of things
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
 Plug 'flazz/vim-colorschemes'                             " Lots of colorschemes
-Plug 'edkolev/tmuxline.vim'
-" Plug 'janko-m/vim-test'
+Plug 'rakr/vim-two-firewatch'
+Plug 'vim-test/vim-test'
 Plug 'thoughtbot/vim-rspec'
 Plug 'jgdavey/tslime.vim'
 Plug 'skywind3000/asyncrun.vim'
@@ -43,34 +41,30 @@ Plug 'roxma/vim-tmux-clipboard'
 Plug 'elixir-editors/vim-elixir'
 Plug 'c-brenn/phoenix.vim'
 Plug 'slashmili/alchemist.vim'
+Plug 'elmcast/elm-vim'
 Plug 'thinca/vim-ref'
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 Plug 'jiangmiao/auto-pairs'
 Plug 'kchmck/vim-coffee-script'
 Plug 'leafgarland/typescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'mattn/emmet-vim'
-" Clojure stuff
-" Plug 'tpope/vim-salve'
-" Plug 'tpope/vim-projectionist'
-" Plug 'tpope/vim-dispatch'
-" Plug 'tpope/vim-fireplace'
+Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-classpath'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'guns/vim-sexp',    {'for': 'clojure'}
-" Plug 'liquidz/vim-iced', {'for': 'clojure'}
-" Plug 'liquidz/vim-iced-coc-source', {'for': 'clojure'}
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
+Plug 'elixir-lsp/coc-elixir', {'do': 'yarn install && yarn prepack'}
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'tpope/vim-rbenv'
 Plug 'kassio/neoterm'
-" Java Stuff :scream:
-Plug 'artur-shaik/vim-javacomplete2'
-Plug 'google/vim-jsonnet'
 Plug 'ekalinin/Dockerfile.vim'
-" Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -98,6 +92,9 @@ inoremap <silent><expr> <Tab>
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
 
+" Display documentation for word under cursor with <leader>h
+nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
+
 syntax on                 " Enable syntax highlighting
 filetype plugin indent on " Enable filetype-specific indenting and plugins
 
@@ -115,7 +112,8 @@ let g:ale_fixers = {
   \    'vue': ['eslint'],
   \    'scss': ['prettier'],
   \    'html': ['prettier'],
-  \    'reason': ['refmt']
+  \    'reason': ['refmt'],
+  \    'elixir': ['mix_format']
 \}
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
@@ -156,10 +154,6 @@ augroup END
 "=====================================================================
 " MAPPINGS
 "=====================================================================
-" Sniprun mappings (to run code from Vim)
-" nmap <leader>ff <Plug>SnipRun
-" nmap <leader>f <Plug>SnipRunOperator
-" vmap f <Plug>SnipRun
 
 " Remove search highlighting with <ENTER>
 :nnoremap <Space> :nohlsearch<cr>
@@ -222,6 +216,9 @@ endif
 runtime! plugin/matchit.vim
 runtime! macros/matchit.vim
 
+" ultsnips settings
+let g:UltiSnipsExpandTrigger="<C-j>"
+
 " Vim Airline Settings
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -230,19 +227,20 @@ let g:airline#extensions#ale#enabled = 1
 
 " vim-rspec mappings
 let g:tslime_always_current_session = 1
-let g:rspec_command = 'call Send_to_Tmux("be rspec {spec}\n")'
-map <Leader>t :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
+" let g:rspec_command = 'call Send_to_Tmux("be rspec {spec}\n")'
+" map <Leader>t :call RunCurrentSpecFile()<CR>
+" map <Leader>s :call RunNearestSpec()<CR>
+" map <Leader>l :call RunLastSpec()<CR>
+" map <Leader>a :call RunAllSpecs()<CR>
 " vim-test settings
-" let test#strategy = "neovim"
-" nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
-" " nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
+let test#strategy = "neoterm"
+nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
+nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
 " nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
 " nmap <silent> t<C-l> :TestLast<CR>    " t Ctrl+l
 " nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
 
+let g:neoterm_default_mod = "botright vertical"
 " Open alternate files (uses the "alt" program)
 " Run a given vim command on the results of alt from a given path.
 " See usage below.
@@ -258,44 +256,61 @@ endfunction
 " Find the alternate file for the current path and open it
 nnoremap <leader>. :w<cr>:call AltCommand(expand('%'), ':e')<cr>
 
-" vim-iced configuration
-let g:iced_enable_default_key_mappings = v:true
-
 """""""""""""""""""
 " LeaderF config
 """"""""""""""""""
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_CommandMap = {'<C-K>': ['<Up>'], '<C-J>': ['<Down>']}
-" don't show the help in normal mode
-let g:Lf_HideHelp = 1
-let g:Lf_UseCache = 0
-let g:Lf_UseVersionControlTool = 0
-let g:Lf_IgnoreCurrentBufferName = 1
-" popup mode
-let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
-let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+" let g:Lf_WindowPosition = 'popup'
+" let g:Lf_PreviewInPopup = 1
+" let g:Lf_CommandMap = {'<C-K>': ['<Up>'], '<C-J>': ['<Down>']}
+" let g:Lf_WildIgnore = { 'file': ['*.beam'] }
+" " don't show the help in normal mode
+" let g:Lf_HideHelp = 1
+" let g:Lf_UseCache = 0
+" let g:Lf_UseVersionControlTool = 0
+" let g:Lf_IgnoreCurrentBufferName = 1
+" " popup mode
+" let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+" let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+"
+" let g:Lf_ShortcutF = "<leader>p"
+" noremap <leader>l :<C-U><C-R>=printf("LeaderfLineAll")<CR><CR>
+" noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+" noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+" noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+" noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+"
+" noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+" noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" " search visually selected text literally
+" xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+" noremap go :<C-U>Leaderf! rg --recall<CR>
+"
+" " should use `Leaderf gtags --update` first
+" let g:Lf_GtagsAutoGenerate = 0
+" let g:Lf_Gtagslabel = 'native-pygments'
+" noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+" noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+" noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+" noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+" noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
-let g:Lf_ShortcutF = "<leader>p"
-noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
-noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
-noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
-noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+"""""""""""""""""""
+" Telescope Config
+"""""""""""""""""""
+nnoremap <Leader>p :lua require'telescope.builtin'.find_files{}<cr>
+nnoremap <Leader>l :lua require'telescope.builtin'.live_grep{}<cr>
 
-noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
-noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
-" search visually selected text literally
-xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
-noremap go :<C-U>Leaderf! rg --recall<CR>
-
-" should use `Leaderf gtags --update` first
-let g:Lf_GtagsAutoGenerate = 0
-let g:Lf_Gtagslabel = 'native-pygments'
-noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
-noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
-noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+lua << EOF
+require('telescope').setup {
+    extensions = {
+        fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
+        }
+    }
+}
+require('telescope').load_extension('fzy_native')
+EOF
 
 " With this, triggering emmet auto generation of HTML markup becomes Ctrl-e,
 let g:user_emmet_leader_key='<C-E>'
@@ -362,6 +377,7 @@ set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 set ignorecase smartcase
 set hlsearch
 set hidden
+set termguicolors
 
 " Formatting (some of these are for coding in C and C++)
 set ts=2  " Tabs are 2 spaces
