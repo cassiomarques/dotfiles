@@ -10,3 +10,4 @@ vendor/lib/pi/pi
 ZEUS.LOG
 .env.development.local
 .env.test.local
+.projections.json
