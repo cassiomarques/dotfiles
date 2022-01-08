@@ -108,10 +108,6 @@ alias cb=change-branch
 alias b="bundle install"
 alias be="bundle exec"
 
-mesosslave-admin () {
-  sft list-servers --project $1 | grep mesosslave-admin | awk '/mesosslave-admin/{print $1}'
-}
-
 # Cursor word navigation that does not conflict with macos "workspace swapping" (ctrl-arrow)
 # This uses ALT + arrow
 bindkey -e
@@ -129,17 +125,14 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 if [ -d /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 
 # append completions to fpath
-fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
-autoload -Uz compinit
-compinit
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
