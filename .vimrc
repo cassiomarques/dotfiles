@@ -1,7 +1,6 @@
 set nocompatible              " be iMproved, required
 
-" let g:python3_host_prog = '/Users/cassio.marques/.pyenv/versions/3.9.1/bin/python'
-let g:python3_host_prog = '/Users/cassio.marques/.pyenv/versions/3.8.5/bin/python'
+let g:python3_host_prog = '/Users/cassiomarquesdacruz/.asdf/shims/python'
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -33,8 +32,6 @@ Plug 'flazz/vim-colorschemes'                             " Lots of colorschemes
 Plug 'rakr/vim-two-firewatch'
 Plug 'vim-test/vim-test'
 Plug 'thoughtbot/vim-rspec'
-Plug 'jgdavey/tslime.vim'
-Plug 'skywind3000/asyncrun.vim'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'roxma/vim-tmux-clipboard'
 Plug 'elixir-editors/vim-elixir'
@@ -42,23 +39,27 @@ Plug 'c-brenn/phoenix.vim'
 Plug 'slashmili/alchemist.vim'
 Plug 'elmcast/elm-vim'
 Plug 'thinca/vim-ref'
-" Plug 'w0rp/ale'
 Plug 'jiangmiao/auto-pairs'
-Plug 'kchmck/vim-coffee-script'
 Plug 'leafgarland/typescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-classpath'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'elixir-lsp/coc-elixir', {'do': 'yarn install && yarn prepack'}
 Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
 Plug 'tpope/vim-rbenv'
 Plug 'kassio/neoterm'
 Plug 'ekalinin/Dockerfile.vim'
-Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'onsails/lspkind-nvim'
 
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -80,58 +81,15 @@ Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 " Initialize plugin system
 call plug#end()
 
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-
-" Display documentation for word under cursor with <leader>h
-nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
-
 syntax on                 " Enable syntax highlighting
 filetype plugin indent on " Enable filetype-specific indenting and plugins
 
-"Ale (linters, etc)
-let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 600
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'vue': ['eslint'],
-\   'react': ['eslint']
-\}
-let g:ale_fixers = {
-  \    'javascript': ['eslint'],
-  \    'typescript': ['prettier', 'tslint'],
-  \    'vue': ['eslint'],
-  \    'scss': ['prettier'],
-  \    'html': ['prettier'],
-  \    'reason': ['refmt'],
-  \    'elixir': ['mix_format']
-\}
-let g:ale_fix_on_save = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-
-" autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-" autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType ruby,perl,tex set shiftwidth=2
 autocmd FileType c,cpp,java,javascript,python,xml,xhtml,html set shiftwidth=2
 autocmd FileType javascript set shiftwidth=2
-" autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 " Removes trailing spaces when saving the buffer
 autocmd BufWritePre * :%s/\s\+$//e
-
-" Automatically format Elixir files when saving.
-" Commenting out for now because it can be a bit slow and I
-" save compulsively...
-" autocmd BufWritePost *.exs,*.ex silent :!mix format %
 
 augroup filetypedetect
   au! BufNewFile,BufRead *.ch setf cheat
@@ -157,20 +115,12 @@ augroup END
 " Remove search highlighting with <ENTER>
 :nnoremap <Space> :nohlsearch<cr>
 
-" Changing tabs
-nmap <Tab> :tabnext<CR>
-nmap <S-Tab> :tabprevious<CR>
-
-" Search for word under cursor using Ag
+"" Search for word under cursor using Ag
 nmap <leader>f :Ag <C-R><C-W><CR>
 
 "Remove trailing spaces with \rt
 nmap <leader>rt :%s/\s\+$//<CR>
 
-"Ctags search always lists all occurrences
-"TODO: Change this so it's only mapped like that if the file is not Clojure
-"If it's Clojure we want to use the C-] source code navigation provided by
-" vim-iced
 nmap <C-]> g<C-]>
 
 "make Y consistent with C and D
@@ -187,10 +137,6 @@ vmap ab :Align {<CR>
 
 " Save file as root
 cnoremap sudow w !sudo tee % >/dev/null
-
-" Clojure stuff (using vim-iced)
-autocmd FileType clojure nmap <leader>b <Plug>(iced_barf)
-autocmd FileType clojure nmap <leader>s <Plug>(iced_slurp)
 
 " CamelCaseMotion mappings
 map <silent> w <Plug>CamelCaseMotion_w
@@ -215,9 +161,6 @@ endif
 runtime! plugin/matchit.vim
 runtime! macros/matchit.vim
 
-" ultsnips settings
-let g:UltiSnipsExpandTrigger="<C-j>"
-
 " Vim Airline Settings
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -225,13 +168,6 @@ let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 
 " vim-rspec mappings
-let g:tslime_always_current_session = 1
-" let g:rspec_command = 'call Send_to_Tmux("be rspec {spec}\n")'
-" map <Leader>t :call RunCurrentSpecFile()<CR>
-" map <Leader>s :call RunNearestSpec()<CR>
-" map <Leader>l :call RunLastSpec()<CR>
-" map <Leader>a :call RunAllSpecs()<CR>
-" vim-test settings
 let test#strategy = "neoterm"
 nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
 nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
@@ -271,6 +207,152 @@ require('telescope').setup {
     }
 }
 require('telescope').load_extension('fzy_native')
+EOF
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Neovim Language Server/autocomplete config
+""""""""""""""""""""""""""""""""""""""""""""""""
+lua << EOF
+local lspconfig = require("lspconfig")
+
+-- Neovim doesn't support snippets out of the box, so we need to mutate the
+-- capabilities we send to the language server to let them know we want snippets.
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+local cmp = require("cmp")
+
+cmp.setup({
+  completion = {
+    autocomplete = false -- so we can trigger it manually
+  },
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+    end,
+  },
+  mapping = {
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s" }),
+    ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    ['<C-e>'] = cmp.mapping({
+    i = cmp.mapping.abort(),
+    c = cmp.mapping.close(),
+    }),
+    -- Accept currently selected item. If none selected, `select` first item.
+    -- Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = {
+    { name = "nvim_lsp" },
+    { name = 'vsnip' } -- For vsnip users.
+  },
+  formatting = {
+    format = require("lspkind").cmp_format({
+      with_text = true,
+      menu = {
+        nvim_lsp = "[LSP]",
+        vsnip = "[S]"
+      },
+    }),
+  },
+})
+
+-- A callback that will get called when a buffer connects to the language server.
+-- Here we create any key maps that we want to have on that buffer.
+local on_attach = function(_, bufnr)
+  local function map(...)
+    vim.api.nvim_buf_set_keymap(bufnr, ...)
+  end
+  local map_opts = {noremap = true, silent = true}
+
+  map("n", "df", "<cmd>lua vim.lsp.buf.formatting()<cr>", map_opts)
+  map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
+  map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
+  map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
+  map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
+  map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
+  map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
+
+  -- DO I NEED THESE?
+  vim.cmd [[imap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]
+  vim.cmd [[smap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>']]
+
+  vim.cmd [[imap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>']]
+  vim.cmd [[smap <expr> <Tab> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<Tab>']]
+  vim.cmd [[imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>']]
+  vim.cmd [[smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>']]
+
+  -- vim.cmd [[inoremap <silent><expr> <C-Space> compe#complete()]]
+  -- vim.cmd [[inoremap <silent><expr> <CR> compe#confirm('<CR>')]]
+  -- vim.cmd [[inoremap <silent><expr> <C-e> compe#close('<C-e>')]]
+  -- vim.cmd [[inoremap <silent><expr> <C-f> compe#scroll({ 'delta': +4 })]]
+  -- vim.cmd [[inoremap <silent><expr> <C-d> compe#scroll({ 'delta': -4 })]]
+  --
+  -- tell nvim-cmp about our desired capabilities
+  require("cmp_nvim_lsp").update_capabilities(capabilities)
+end
+
+-- Replace the following with the path to your installation
+local path_to_elixirls = vim.fn.expand("~/personal/elixir-ls/release/language_server.sh")
+
+lspconfig.elixirls.setup({
+  cmd = {path_to_elixirls},
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    elixirLS = {
+      -- I choose to disable dialyzer for personal reasons, but
+      -- I would suggest you also disable it unless you are well
+      -- aquainted with dialzyer and know how to use it.
+      dialyzerEnabled = true,
+      -- I also choose to turn off the auto dep fetching feature.
+      -- It often get's into a weird state that requires deleting
+      -- the .elixir_ls directory and restarting your editor.
+      fetchDeps = false
+    }
+  }
+})
+
+-- Uses https://github.com/mattn/efm-langserver
+-- to automatically format code via linters
+lspconfig.efm.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = {"elixir"},
+  init_options = {documentFormatting = true},
+    settings = {
+        rootMarkers = {".git/"}
+    }
+})
 EOF
 
 " With this, triggering emmet auto generation of HTML markup becomes Ctrl-e,
