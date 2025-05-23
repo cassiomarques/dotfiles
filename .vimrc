@@ -10,43 +10,36 @@ call plug#begin('~/.vim/plugged')
 Plug 'vim-scripts/CSApprox'
 Plug 'rking/ag.vim'
 Plug 'vim-scripts/Align'
-Plug 'jlanzarotta/bufexplorer'
 Plug 'bkad/CamelCaseMotion'
 Plug 'bling/vim-airline'
 Plug 'edkolev/tmuxline.vim'
 Plug 'tpope/vim-endwise'
-Plug 'othree/yajs.vim'
-Plug 'maxmellon/vim-jsx-pretty'
 Plug 'lifepillar/pgsql.vim'
 Plug 'tpope/vim-markdown'
 Plug 'tmhedberg/matchit'
-Plug 'tpope/vim-rails'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'                                 " Git stuff
 Plug 'tpope/vim-rhubarb'
-Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'gcmt/wildfire.vim'                                  " Select blocks of things
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
 Plug 'flazz/vim-colorschemes'                             " Lots of colorschemes
 Plug 'rakr/vim-two-firewatch'
 Plug 'vim-test/vim-test'
-Plug 'thoughtbot/vim-rspec'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'roxma/vim-tmux-clipboard'
 Plug 'elixir-editors/vim-elixir'
 Plug 'c-brenn/phoenix.vim'
 Plug 'slashmili/alchemist.vim'
-Plug 'elmcast/elm-vim'
 Plug 'thinca/vim-ref'
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs'
+Plug 'windwp/nvim-autopairs'
 Plug 'leafgarland/typescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-classpath'
 Plug 'prabirshrestha/async.vim'
-Plug 'tpope/vim-rbenv'
 Plug 'kassio/neoterm'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'hrsh7th/vim-vsnip'
@@ -61,22 +54,19 @@ Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'onsails/lspkind-nvim'
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'tag': 'v0.9.2'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 
-function! BuildComposer(info)
-  if a:info.status != 'unchanged' || a:info.force
-    if has('nvim')
-      !cargo build --release
-    else
-      !cargo build --release --no-default-features --features json-rpc
-    endif
-  endif
-endfunction
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+Plug 'rust-lang/rust.vim'
+Plug 'github/copilot.vim'
+Plug 'CopilotC-Nvim/CopilotChat.nvim'
+
+Plug 'pmizio/typescript-tools.nvim'
 
 " Initialize plugin system
 call plug#end()
@@ -91,21 +81,25 @@ autocmd FileType javascript set shiftwidth=2
 " Removes trailing spaces when saving the buffer
 autocmd BufWritePre * :%s/\s\+$//e
 
-augroup filetypedetect
-  au! BufNewFile,BufRead *.ch setf cheat
-  au BufNewFile,BufRead *.liquid setf liquid
-  au! BufRead,BufNewFile *.haml setfiletype haml
-  autocmd BufNewFile,BufRead *.yml setf eruby
-  autocmd BufRead,BufNewFile Guardfile set filetype=ruby
-  autocmd BufNewFile,BufRead *.clj set filetype=clojure
-  autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-augroup END
+" TODO: REMOVE THIS?
+" augroup filetypedetect
+"   au! BufNewFile,BufRead *.ch setf cheat
+"   au BufNewFile,BufRead *.liquid setf liquid
+"   au! BufRead,BufNewFile *.haml setfiletype haml
+"   autocmd BufNewFile,BufRead *.yml setf eruby
+"   autocmd BufRead,BufNewFile Guardfile set filetype=ruby
+"   autocmd BufNewFile,BufRead *.clj set filetype=clojure
+"   autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+" augroup END
+
+au BufRead,BufNewFile *.eex,*.heex,*.leex,*.sface,*.lexs set filetype=eelixir
 
 augroup myfiletypes
   " Clear old autocmds in group
   autocmd!
   " autoindent with two spaces, always expand tabs
   autocmd FileType ruby,eruby,yaml set ai sw=2 sts=2 et
+  autocmd FileType kotlin setlocal shiftwidth=4 softtabstop=4 expandtab
 augroup END
 
 "=====================================================================
@@ -117,6 +111,11 @@ augroup END
 
 "" Search for word under cursor using Ag
 nmap <leader>f :Ag <C-R><C-W><CR>
+
+" Toggles nvim terminal
+nmap <leader>m :Ttoggle<CR>
+
+nmap <leader>c :CopilotChat<CR>
 
 "Remove trailing spaces with \rt
 nmap <leader>rt :%s/\s\+$//<CR>
@@ -156,6 +155,106 @@ endif
 "=====================================================================
 " PLUGIN CONFIGURATIONS
 "=====================================================================
+
+" Autopairs Config
+lua << EOF
+require("nvim-autopairs").setup {}
+EOF
+
+" Rust autoformatting on save
+let g:rustfmt_autosave = 1
+
+" Markdown preview
+" set to 1, nvim will open the preview window after entering the markdown buffer
+" default: 0
+let g:mkdp_auto_start = 0
+
+" set to 1, the nvim will auto close current preview window when change
+" from markdown buffer to another buffer
+" default: 1
+let g:mkdp_auto_close = 1
+
+" set to 1, the vim will refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+" default: 0
+let g:mkdp_refresh_slow = 0
+
+" set to 1, the MarkdownPreview command can be use for all files,
+" by default it can be use in markdown file
+" default: 0
+let g:mkdp_command_for_global = 0
+
+" set to 1, preview server available to others in your network
+" by default, the server listens on localhost (127.0.0.1)
+" default: 0
+let g:mkdp_open_to_the_world = 0
+
+" use custom IP to open preview page
+" useful when you work in remote vim and preview on local browser
+" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
+" default empty
+let g:mkdp_open_ip = ''
+
+" specify browser to open preview page
+" default: ''
+let g:mkdp_browser = ''
+
+" set to 1, echo preview page url in command line when open preview page
+" default is 0
+let g:mkdp_echo_preview_url = 0
+
+" a custom vim function name to open preview page
+" this function will receive url as param
+" default is empty
+let g:mkdp_browserfunc = ''
+
+" options for markdown render
+" mkit: markdown-it options for render
+" katex: katex options for math
+" uml: markdown-it-plantuml options
+" maid: mermaid options
+" disable_sync_scroll: if disable sync scroll, default 0
+" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
+"   middle: mean the cursor position alway show at the middle of the preview page
+"   top: mean the vim top viewport alway show at the top of the preview page
+"   relative: mean the cursor position alway show at the relative positon of the preview page
+" hide_yaml_meta: if hide yaml metadata, default is 1
+" sequence_diagrams: js-sequence-diagrams options
+" content_editable: if enable content editable for preview page, default: v:false
+" disable_filename: if disable filename header for preview page, default: 0
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1,
+    \ 'sequence_diagrams': {},
+    \ 'flowchart_diagrams': {},
+    \ 'content_editable': v:false,
+    \ 'disable_filename': 0
+    \ }
+
+" use a custom markdown style must be absolute path
+" like '/Users/username/markdown.css' or expand('~/markdown.css')
+let g:mkdp_markdown_css = ''
+
+" use a custom highlight style must absolute path
+" like '/Users/username/highlight.css' or expand('~/highlight.css')
+let g:mkdp_highlight_css = ''
+
+" use a custom port to start server or random for empty
+let g:mkdp_port = ''
+
+" preview page title
+" ${name} will be replace with the file name
+let g:mkdp_page_title = '「${name}」'
+
+" recognized filetypes
+" these filetypes will have MarkdownPreview... commands
+let g:mkdp_filetypes = ['markdown']
 
 " Load matchit (% to bounce from do to end, etc.)
 runtime! plugin/matchit.vim
@@ -210,10 +309,22 @@ require('telescope').load_extension('fzy_native')
 EOF
 
 """"""""""""""""""""""""""""""""""""""""""""""""
+" Github Copilot chat config
+""""""""""""""""""""""""""""""""""""""""""""""""
+lua << EOF
+require("CopilotChat").setup {
+  debug = true, -- Enable debugging
+  -- See Configuration section for rest
+}
+EOF
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""
 " Neovim Language Server/autocomplete config
 """"""""""""""""""""""""""""""""""""""""""""""""
 lua << EOF
 local lspconfig = require("lspconfig")
+local lsputil = require("lspconfig/util")
 
 -- Neovim doesn't support snippets out of the box, so we need to mutate the
 -- capabilities we send to the language server to let them know we want snippets.
@@ -294,8 +405,8 @@ local on_attach = function(_, bufnr)
   end
   local map_opts = {noremap = true, silent = true}
 
-  map("n", "df", "<cmd>lua vim.lsp.buf.formatting()<cr>", map_opts)
-  map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
+  map("n", "df", "<cmd>lua vim.lsp.buf.format()<cr>", map_opts)
+  map("n", "gd", "<cmd>lua vim.diagnostic.open_float()<cr>", map_opts)
   map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
   map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
   map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
@@ -342,24 +453,81 @@ lspconfig.elixirls.setup({
   }
 })
 
--- Uses https://github.com/mattn/efm-langserver
--- to automatically format code via linters
-lspconfig.efm.setup({
+-- local path_to_rust_analyzer = "~/.cargo/bin/rust-analyzer"
+lspconfig.rust_analyzer.setup({
+  -- cmd = {path_to_rust_analyzer},
   capabilities = capabilities,
   on_attach = on_attach,
-  filetypes = {"elixir"},
-  init_options = {documentFormatting = true},
-    settings = {
-        rootMarkers = {".git/"}
+  filetypes = {"rust"},
+  root_dir = lsputil.root_pattern("Cargo.toml"),
+  settings = {
+    ['rust-analyzer'] = {
+      cargo = {
+        allFeatures = true
+      }
     }
+  }
 })
+
+-- TypeScript language server setup
+require("typescript-tools").setup {
+  on_attach = on_attach,
+  handlers = {},
+  settings = {
+    -- spawn additional tsserver instance to calculate diagnostics on it
+    separate_diagnostic_server = true,
+    -- "change"|"insert_leave" determine when the client asks the server about diagnostic
+    publish_diagnostic_on = "insert_leave",
+    -- array of strings("fix_all"|"add_missing_imports"|"remove_unused"|
+    -- "remove_unused_imports"|"organize_imports") -- or string "all"
+    -- to include all supported code actions
+    -- specify commands exposed as code_actions
+    expose_as_code_action = {},
+    -- string|nil - specify a custom path to `tsserver.js` file, if this is nil or file under path
+    -- not exists then standard path resolution strategy is applied
+    tsserver_path = nil,
+    -- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
+    -- (see 💅 `styled-components` support section)
+    tsserver_plugins = {},
+    -- this value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
+    -- memory limit in megabytes or "auto"(basically no limit)
+    tsserver_max_memory = "auto",
+    -- described below
+    tsserver_format_options = {},
+    tsserver_file_preferences = {},
+    -- locale of all tsserver messages, supported locales you can find here:
+    -- https://github.com/microsoft/TypeScript/blob/3c221fc086be52b19801f6e8d82596d04607ede6/src/compiler/utilitiesPublic.ts#L620
+    tsserver_locale = "en",
+    -- mirror of VSCode's `typescript.suggest.completeFunctionCalls`
+    complete_function_calls = false,
+    include_completions_with_insert_text = true,
+    -- CodeLens
+    -- WARNING: Experimental feature also in VSCode, because it might hit performance of server.
+    -- possible values: ("off"|"all"|"implementations_only"|"references_only")
+    code_lens = "off",
+    -- by default code lenses are displayed on all referencable values and for some of you it can
+    -- be too much this option reduce count of them by removing member references from lenses
+    disable_member_code_lens = true,
+    -- JSXCloseTag
+    -- WARNING: it is disabled by default (maybe you configuration or distro already uses nvim-ts-autotag,
+    -- that maybe have a conflict if enable this feature. )
+    jsx_close_tag = {
+        enable = false,
+        filetypes = { "javascriptreact", "typescriptreact" },
+    }
+  },
+}
+
 EOF
 
 " With this, triggering emmet auto generation of HTML markup becomes Ctrl-e,
 let g:user_emmet_leader_key='<C-E>'
 
-" Markdown composer config
-let g:markdown_composer_autostart = 0
+" Prevent Github Copilot from trying to use the tab key, map something else
+" instead
+imap <silent><script><expr> <leader>c copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+let g:copilot_assume_mapped = v:true
 
 "=====================================================================
 " Colorscheme, Tmux, etc

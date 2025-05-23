@@ -10,6 +10,9 @@ export ZSH=$HOME/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
 
+export ASDF_DATA_DIR=/Users/cassiomarquesdacruz/.asdf
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -69,7 +72,9 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump asdf)
+plugins=(git autojump)
+
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 
@@ -107,6 +112,14 @@ alias vim=nvim
 alias cb=change-branch
 alias b="bundle install"
 alias be="bundle exec"
+alias gfpm="git fetch origin -p && git co main && git pull origin main"
+alias asdf="/opt/homebrew/bin/asdf"
+
+# Elixir/Phoenix aliases
+alias mt="mix test"
+
+# Github Copilot CLI alias
+eval "$(gh copilot alias -- zsh)"
 
 # Cursor word navigation that does not conflict with macos "workspace swapping" (ctrl-arrow)
 # This uses ALT + arrow
@@ -138,3 +151,8 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+eval "$(direnv hook zsh)"
