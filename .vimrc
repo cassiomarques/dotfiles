@@ -11,7 +11,10 @@ Plug 'vim-scripts/CSApprox'
 Plug 'rking/ag.vim'
 Plug 'vim-scripts/Align'
 Plug 'bkad/CamelCaseMotion'
-Plug 'bling/vim-airline'
+" Plug 'bling/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'edkolev/tmuxline.vim'
 Plug 'tpope/vim-endwise'
 Plug 'lifepillar/pgsql.vim'
@@ -53,6 +56,7 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'onsails/lspkind-nvim'
+Plug 'rgroli/other.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'tag': 'v0.9.2'}
 Plug 'nvim-lua/plenary.nvim'
@@ -81,17 +85,6 @@ autocmd FileType javascript set shiftwidth=2
 " Removes trailing spaces when saving the buffer
 autocmd BufWritePre * :%s/\s\+$//e
 
-" TODO: REMOVE THIS?
-" augroup filetypedetect
-"   au! BufNewFile,BufRead *.ch setf cheat
-"   au BufNewFile,BufRead *.liquid setf liquid
-"   au! BufRead,BufNewFile *.haml setfiletype haml
-"   autocmd BufNewFile,BufRead *.yml setf eruby
-"   autocmd BufRead,BufNewFile Guardfile set filetype=ruby
-"   autocmd BufNewFile,BufRead *.clj set filetype=clojure
-"   autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-" augroup END
-
 au BufRead,BufNewFile *.eex,*.heex,*.leex,*.sface,*.lexs set filetype=eelixir
 
 augroup myfiletypes
@@ -116,9 +109,6 @@ nmap <leader>f :Ag <C-R><C-W><CR>
 nmap <leader>m :Ttoggle<CR>
 
 nmap <leader>c :CopilotChat<CR>
-
-"Remove trailing spaces with \rt
-nmap <leader>rt :%s/\s\+$//<CR>
 
 nmap <C-]> g<C-]>
 
@@ -260,19 +250,12 @@ let g:mkdp_filetypes = ['markdown']
 runtime! plugin/matchit.vim
 runtime! macros/matchit.vim
 
-" Vim Airline Settings
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tmuxline#enabled = 1
-let g:airline#extensions#ale#enabled = 1
-
-" vim-rspec mappings
-let test#strategy = "neoterm"
-nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
-nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
-" nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
-" nmap <silent> t<C-l> :TestLast<CR>    " t Ctrl+l
-" nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
+" Lualine setup
+lua << END
+require('lualine').setup({
+  options = { theme = 'everforest' }
+})
+END
 
 let g:neoterm_default_mod = "botright vertical"
 " Open alternate files (uses the "alt" program)
