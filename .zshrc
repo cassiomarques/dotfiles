@@ -12,6 +12,7 @@ ZSH_THEME="robbyrussell"
 
 export ASDF_DATA_DIR=/Users/cassiomarquesdacruz/.asdf
 export PATH="$ASDF_DATA_DIR/shims:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 
 # Set list of themes to pick from when loading at random
@@ -150,6 +151,14 @@ if [ -d /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"

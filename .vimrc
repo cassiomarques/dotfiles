@@ -59,6 +59,8 @@ Plug 'onsails/lspkind-nvim'
 Plug 'rgroli/other.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'tag': 'v0.9.2'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'ray-x/go.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
@@ -126,6 +128,12 @@ vmap ab :Align {<CR>
 
 " Save file as root
 cnoremap sudow w !sudo tee % >/dev/null
+
+" Run tests
+" vim-rspec mappings
+let test#strategy = "neoterm"
+nmap <silent> <leader>t :TestNearest<CR> " t Ctrl+n
+nmap <silent> <leader>b :TestFile<CR>    " t Ctrl+f
 
 " CamelCaseMotion mappings
 map <silent> w <Plug>CamelCaseMotion_w
