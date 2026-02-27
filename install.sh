@@ -90,6 +90,21 @@ else
   echo "==> tree-sitter CLI already installed"
 fi
 
+# --- ruby-lsp gem (installed with project Ruby — system Ruby 2.7 is too old for mason) ---
+echo "==> Installing ruby-lsp gem with project Ruby..."
+RUBY_SHA=$(/workspaces/github/config/ruby-version 2>/dev/null)
+if [ -n "$RUBY_SHA" ]; then
+  PROJECT_RUBY_BIN="/workspaces/github/vendor/ruby/$RUBY_SHA/bin"
+  if [ -x "$PROJECT_RUBY_BIN/gem" ]; then
+    PATH="$PROJECT_RUBY_BIN:$PATH" gem install ruby-lsp --no-document
+    echo "    ruby-lsp installed: $(PATH="$PROJECT_RUBY_BIN:$PATH" ruby-lsp --version 2>&1 || true)"
+  else
+    echo "    ⚠️  Project Ruby not found at $PROJECT_RUBY_BIN — ruby-lsp not installed"
+  fi
+else
+  echo "    ⚠️  Could not determine Ruby version — ruby-lsp not installed"
+fi
+
 # --- Neovim config (LazyVim) ---
 echo "==> Setting up Neovim config (LazyVim)..."
 if [ -d "$HOME/.config/nvim" ]; then
