@@ -16,4 +16,18 @@ return {
       },
     },
   },
+
+  -- Configure ruby_lsp server to use project Ruby
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        ruby_lsp = {
+          mason = true,
+          cmd = { "ruby-lsp" },
+          enabled = true,
+        },
+      },
+    },
+  },
 }
