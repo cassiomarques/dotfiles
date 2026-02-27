@@ -75,7 +75,15 @@ fi
 # --- tree-sitter CLI (needed by nvim-treesitter; mason's binary requires newer glibc) ---
 if ! command -v tree-sitter &>/dev/null; then
   echo "==> Installing tree-sitter CLI via npm..."
-  npm install -g tree-sitter-cli
+  # npm is in the monolith's vendor/node, not on PATH during dotfiles install
+  NODE_BIN=$(find /workspaces/github/vendor/node -maxdepth 2 -name npm -path '*/bin/npm' 2>/dev/null | head -1)
+  if [ -n "$NODE_BIN" ]; then
+    NODE_DIR=$(dirname "$NODE_BIN")
+    PATH="$NODE_DIR:$PATH" npm install -g tree-sitter-cli
+  else
+    echo "    npm not found, installing tree-sitter via cargo (this may take a few minutes)..."
+    cargo install tree-sitter-cli
+  fi
 else
   echo "==> tree-sitter CLI already installed"
 fi
