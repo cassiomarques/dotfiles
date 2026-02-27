@@ -72,6 +72,14 @@ else
   echo "==> ripgrep already installed"
 fi
 
+# --- tree-sitter CLI (needed by nvim-treesitter; mason's binary requires newer glibc) ---
+if ! command -v tree-sitter &>/dev/null; then
+  echo "==> Installing tree-sitter CLI via npm..."
+  npm install -g tree-sitter-cli
+else
+  echo "==> tree-sitter CLI already installed"
+fi
+
 # --- Neovim config (LazyVim) ---
 echo "==> Setting up Neovim config (LazyVim)..."
 if [ -d "$HOME/.config/nvim" ]; then
