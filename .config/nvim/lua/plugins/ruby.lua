@@ -16,7 +16,22 @@ return {
           mason = false,
           enabled = true,
           cmd = { "ruby-lsp" },
+          init_options = {
+            indexing = {
+              -- Exclude heavy dirs from pattern-based indexing to speed up startup.
+              -- Gems are still indexed via Bundler's gem resolution (only lib/ paths).
+              excludedPatterns = {
+                "**/vendor/gems/**/*",
+                "**/vendor/ruby/**/*",
+                "**/sorbet/**/*",
+                "**/node_modules/**/*",
+                "**/db/**/*",
+              },
+            },
+          },
         },
+        -- Disable solargraph — ruby-lsp is the primary Ruby LSP
+        solargraph = { enabled = false },
       },
     },
   },

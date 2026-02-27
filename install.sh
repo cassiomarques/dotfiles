@@ -114,6 +114,28 @@ else
   echo "    ⚠️  Could not determine Ruby version — ruby-lsp not installed"
 fi
 
+# --- universal-ctags (fast navigation while ruby-lsp indexes) ---
+if ! command -v ctags &>/dev/null; then
+  echo "==> Installing universal-ctags..."
+  sudo apt-get install -y universal-ctags
+else
+  echo "==> ctags already installed: $(ctags --version | head -1)"
+fi
+
+# Generate initial ctags in background (fast, ~seconds vs ruby-lsp indexing minutes)
+echo "==> Generating ctags for github/github (background)..."
+(cd /workspaces/github && ctags -R \
+  --languages=Ruby \
+  --exclude=vendor/ruby \
+  --exclude=vendor/cache \
+  --exclude=node_modules \
+  --exclude=sorbet \
+  --exclude=tmp \
+  --exclude=log \
+  --exclude=db \
+  -f tags \
+  app lib config packages vendor/gems &) 2>/dev/null
+
 # --- Neovim config (LazyVim) ---
 echo "==> Setting up Neovim config (LazyVim)..."
 if [ -d "$HOME/.config/nvim" ]; then
