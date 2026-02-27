@@ -17,15 +17,30 @@ echo "==> Running Codespace dotfiles installer from ${DOTFILES_DIR}..."
 sudo apt-get update -qq
 
 # --- Neovim (nightly/prerelease via AppImage — required for LazyVim 0.12+ features) ---
+NVIM_REQUIRED_MAJOR=0
+NVIM_REQUIRED_MINOR=12
+needs_nvim_install=true
+
 if command -v nvim &>/dev/null; then
-  echo "==> Neovim already installed: $(nvim --version | head -1)"
-  echo "    To upgrade, remove /squashfs-root and /usr/bin/nvim, then re-run this script."
-else
+  nvim_version=$(nvim --version | head -1 | grep -oP '\d+\.\d+' | head -1)
+  nvim_major=$(echo "$nvim_version" | cut -d. -f1)
+  nvim_minor=$(echo "$nvim_version" | cut -d. -f2)
+  if [ "$nvim_major" -gt "$NVIM_REQUIRED_MAJOR" ] 2>/dev/null || \
+     { [ "$nvim_major" -eq "$NVIM_REQUIRED_MAJOR" ] && [ "$nvim_minor" -ge "$NVIM_REQUIRED_MINOR" ]; } 2>/dev/null; then
+    echo "==> Neovim already meets requirement (>= ${NVIM_REQUIRED_MAJOR}.${NVIM_REQUIRED_MINOR}): $(nvim --version | head -1)"
+    needs_nvim_install=false
+  else
+    echo "==> Neovim $(nvim --version | head -1) is too old, upgrading to nightly..."
+  fi
+fi
+
+if [ "$needs_nvim_install" = true ]; then
   echo "==> Installing Neovim nightly (prerelease) via AppImage..."
   curl -fsSL -o /tmp/nvim.appimage \
     https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage
   chmod u+x /tmp/nvim.appimage
   cd /tmp && ./nvim.appimage --appimage-extract
+  sudo rm -rf /squashfs-root
   sudo mv /tmp/squashfs-root /squashfs-root
   sudo ln -sf /squashfs-root/AppRun /usr/bin/nvim
   rm -f /tmp/nvim.appimage
