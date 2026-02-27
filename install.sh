@@ -22,7 +22,7 @@ NVIM_REQUIRED_MINOR=12
 needs_nvim_install=true
 
 if command -v nvim &>/dev/null; then
-  nvim_version=$(nvim --version | head -1 | grep -oP '\d+\.\d+' | head -1)
+  nvim_version=$(nvim --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+' | head -1)
   nvim_major=$(echo "$nvim_version" | cut -d. -f1)
   nvim_minor=$(echo "$nvim_version" | cut -d. -f2)
   if [ "$nvim_major" -gt "$NVIM_REQUIRED_MAJOR" ] 2>/dev/null || \
@@ -45,7 +45,7 @@ if [ "$needs_nvim_install" = true ]; then
   sudo mv /tmp/squashfs-root /squashfs-root
   sudo ln -sf /squashfs-root/AppRun /usr/bin/nvim
   rm -f /tmp/nvim.appimage
-  echo "    Installed: $(nvim --version | head -1)"
+  echo "    Installed: $(nvim --version 2>/dev/null | head -1)"
 fi
 
 # --- tmux ---
