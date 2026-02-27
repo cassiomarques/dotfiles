@@ -97,7 +97,16 @@ if [ -n "$RUBY_SHA" ]; then
   PROJECT_RUBY_BIN="/workspaces/github/vendor/ruby/$RUBY_SHA/bin"
   if [ -x "$PROJECT_RUBY_BIN/gem" ]; then
     PATH="$PROJECT_RUBY_BIN:$PATH" gem install ruby-lsp --no-document
-    echo "    ruby-lsp installed: $(PATH="$PROJECT_RUBY_BIN:$PATH" ruby-lsp --version 2>&1 || true)"
+    # Create wrapper script so ruby-lsp is on PATH and uses project Ruby
+    sudo tee /usr/local/bin/ruby-lsp > /dev/null <<'WRAPPER'
+#!/bin/bash
+RUBY_SHA=$(/workspaces/github/config/ruby-version 2>/dev/null)
+RBIN="/workspaces/github/vendor/ruby/$RUBY_SHA/bin"
+export PATH="$RBIN:$PATH"
+exec "$RBIN/ruby-lsp" "$@"
+WRAPPER
+    sudo chmod +x /usr/local/bin/ruby-lsp
+    echo "    ruby-lsp installed: $(ruby-lsp --version 2>&1 || true)"
   else
     echo "    ⚠️  Project Ruby not found at $PROJECT_RUBY_BIN — ruby-lsp not installed"
   fi
