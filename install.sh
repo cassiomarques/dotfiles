@@ -83,6 +83,8 @@ if ! command -v tree-sitter &>/dev/null; then
   else
     echo "    npm not found, installing tree-sitter via cargo (this may take a few minutes)..."
     cargo install tree-sitter-cli
+    # Ensure tree-sitter is on PATH for all sessions
+    sudo ln -sf "$HOME/.cargo/bin/tree-sitter" /usr/local/bin/tree-sitter
   fi
 else
   echo "==> tree-sitter CLI already installed"
