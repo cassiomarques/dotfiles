@@ -36,8 +36,9 @@ fi
 
 if [ "$needs_nvim_install" = true ]; then
   echo "==> Installing Neovim nightly (prerelease) via AppImage..."
+  # Use neovim-releases repo (built for older glibc, compatible with Ubuntu 20.04)
   curl -fsSL -o /tmp/nvim.appimage \
-    https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage
+    https://github.com/neovim/neovim-releases/releases/download/nightly/nvim-linux-x86_64.appimage
   chmod u+x /tmp/nvim.appimage
   cd /tmp && ./nvim.appimage --appimage-extract
   sudo rm -rf /squashfs-root
