@@ -15,6 +15,7 @@ return {
         ruby_lsp = {
           mason = false,
           enabled = true,
+          cmd = { "ruby-lsp" },
         },
       },
     },
