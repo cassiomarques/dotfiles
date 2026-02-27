@@ -118,6 +118,23 @@ fi
 echo "==> Installing tmux plugins via TPM..."
 "$HOME/.tmux/plugins/tpm/bin/install_plugins" || true
 
+# --- Shell environment for github/github Ruby ---
+RUBY_PROFILE_MARKER="# dotfiles: github/github Ruby PATH"
+if ! grep -q "$RUBY_PROFILE_MARKER" "$HOME/.bashrc" 2>/dev/null; then
+  echo "==> Adding github/github Ruby to shell PATH..."
+  cat >> "$HOME/.bashrc" <<'BASHEOF'
+
+# dotfiles: github/github Ruby PATH
+if [ -d "/workspaces/github" ]; then
+  export RAILS_ROOT="/workspaces/github"
+  RUBY_SHA=$("$RAILS_ROOT/config/ruby-version")
+  export PATH="$RAILS_ROOT/vendor/ruby/$RUBY_SHA/bin:$RAILS_ROOT/bin:$PATH"
+fi
+BASHEOF
+else
+  echo "==> Ruby PATH already in .bashrc"
+fi
+
 echo ""
 echo "✅ Codespace dotfiles setup complete!"
 echo "   - Neovim + LazyVim: run 'nvim' (plugins install on first launch)"
