@@ -13,6 +13,21 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "==> Running Codespace dotfiles installer from ${DOTFILES_DIR}..."
 
+# Repositories that need Ruby development setup (ruby-lsp, ctags, Ruby PATH).
+# Add new entries to enable Ruby tooling for other Codespace repos.
+RUBY_REPOS=(
+  /workspaces/github
+  # /workspaces/another-ruby-repo
+)
+
+RUBY_REPO=""
+for repo in "${RUBY_REPOS[@]}"; do
+  if [[ -d "$repo" ]]; then
+    RUBY_REPO="$repo"
+    break
+  fi
+done
+
 # --- Update package index once for all apt installs below ---
 sudo apt-get update -qq
 
@@ -74,67 +89,87 @@ fi
 
 # --- tree-sitter CLI (needed by nvim-treesitter; mason's binary requires newer glibc) ---
 if ! command -v tree-sitter &>/dev/null; then
-  echo "==> Installing tree-sitter CLI via npm..."
-  # npm is in the monolith's vendor/node, not on PATH during dotfiles install
-  NODE_BIN=$(find /workspaces/github/vendor/node -maxdepth 2 -name npm -path '*/bin/npm' 2>/dev/null | head -1)
-  if [ -n "$NODE_BIN" ]; then
-    NODE_DIR=$(dirname "$NODE_BIN")
-    PATH="$NODE_DIR:$PATH" npm install -g tree-sitter-cli
-  else
-    echo "    npm not found, installing tree-sitter via cargo (this may take a few minutes)..."
-    cargo install tree-sitter-cli
-    # Ensure tree-sitter is on PATH for all sessions
-    sudo ln -sf "$HOME/.cargo/bin/tree-sitter" /usr/local/bin/tree-sitter
-  fi
+  echo "==> Installing tree-sitter CLI via cargo (this may take a few minutes)..."
+  cargo install tree-sitter-cli
+  sudo ln -sf "$HOME/.cargo/bin/tree-sitter" /usr/local/bin/tree-sitter
 else
   echo "==> tree-sitter CLI already installed"
 fi
 
-# --- ruby-lsp gem (installed with project Ruby — system Ruby 2.7 is too old for mason) ---
-echo "==> Installing ruby-lsp gem with project Ruby..."
-RUBY_SHA=$(/workspaces/github/config/ruby-version 2>/dev/null)
-if [ -n "$RUBY_SHA" ]; then
-  PROJECT_RUBY_BIN="/workspaces/github/vendor/ruby/$RUBY_SHA/bin"
-  if [ -x "$PROJECT_RUBY_BIN/gem" ]; then
-    PATH="$PROJECT_RUBY_BIN:$PATH" gem install ruby-lsp --no-document
-    # Create wrapper script so ruby-lsp is on PATH and uses project Ruby
-    sudo tee /usr/local/bin/ruby-lsp > /dev/null <<'WRAPPER'
-#!/bin/bash
-RUBY_SHA=$(/workspaces/github/config/ruby-version 2>/dev/null)
-RBIN="/workspaces/github/vendor/ruby/$RUBY_SHA/bin"
-export PATH="$RBIN:$PATH"
-exec "$RBIN/ruby-lsp" "$@"
-WRAPPER
-    sudo chmod +x /usr/local/bin/ruby-lsp
-    echo "    ruby-lsp installed: $(ruby-lsp --version 2>&1 || true)"
+# --- Ruby development setup (only for repos listed in RUBY_REPOS) ---
+if [[ -n "$RUBY_REPO" ]]; then
+  echo "==> Setting up Ruby development tools for ${RUBY_REPO}..."
+
+  # Determine which Ruby to use: project vendored Ruby if available, system Ruby otherwise
+  RUBY_SHA=$("$RUBY_REPO/config/ruby-version" 2>/dev/null || true)
+  PROJECT_RUBY_BIN="$RUBY_REPO/vendor/ruby/$RUBY_SHA/bin"
+  if [[ -n "$RUBY_SHA" && -x "$PROJECT_RUBY_BIN/ruby" ]]; then
+    RUBY_BIN="$PROJECT_RUBY_BIN"
+    echo "    Using project Ruby: $($RUBY_BIN/ruby --version)"
   else
-    echo "    ⚠️  Project Ruby not found at $PROJECT_RUBY_BIN — ruby-lsp not installed"
+    RUBY_BIN="$(dirname "$(command -v ruby)")"
+    echo "    Project Ruby not found, using system Ruby: $(ruby --version)"
   fi
-else
-  echo "    ⚠️  Could not determine Ruby version — ruby-lsp not installed"
-fi
 
-# --- universal-ctags (fast navigation while ruby-lsp indexes) ---
-if ! command -v ctags &>/dev/null; then
-  echo "==> Installing universal-ctags..."
-  sudo apt-get install -y universal-ctags
+  # ruby-lsp gem
+  echo "    Installing ruby-lsp gem..."
+  PATH="$RUBY_BIN:$PATH" gem install ruby-lsp --no-document
+  # Wrapper script so ruby-lsp uses the correct Ruby regardless of shell PATH
+  sudo tee /usr/local/bin/ruby-lsp > /dev/null <<WRAPPER
+#!/bin/bash
+RUBY_SHA=\$($RUBY_REPO/config/ruby-version 2>/dev/null || true)
+RBIN="$RUBY_REPO/vendor/ruby/\$RUBY_SHA/bin"
+if [[ -x "\$RBIN/ruby" ]]; then
+  export PATH="\$RBIN:\$PATH"
+  exec "\$RBIN/ruby-lsp" "\$@"
 else
-  echo "==> ctags already installed: $(ctags --version | head -1)"
+  exec ruby-lsp "\$@"
 fi
+WRAPPER
+  sudo chmod +x /usr/local/bin/ruby-lsp
+  echo "    ruby-lsp installed: $(ruby-lsp --version 2>&1 || true)"
 
-# Generate initial ctags in background (fast, ~seconds vs ruby-lsp indexing minutes)
-echo "==> Generating ctags for github/github (background)..."
-(cd /workspaces/github && ctags -R \
-  --languages=Ruby \
-  --exclude=vendor/ruby \
-  --exclude=vendor/cache \
-  --exclude=node_modules \
-  --exclude=sorbet \
-  --exclude=tmp \
-  --exclude=log \
-  --exclude=db \
-  -f tags \
-  app lib config packages vendor/gems &) 2>/dev/null
+  # universal-ctags for fast navigation while ruby-lsp indexes
+  if ! command -v ctags &>/dev/null; then
+    echo "    Installing universal-ctags..."
+    sudo apt-get install -y universal-ctags
+  fi
+
+  # Generate ctags in background
+  echo "    Generating ctags (background)..."
+  (cd "$RUBY_REPO" && ctags -R \
+    --languages=Ruby \
+    --exclude=vendor/ruby \
+    --exclude=vendor/cache \
+    --exclude=node_modules \
+    --exclude=sorbet \
+    --exclude=tmp \
+    --exclude=log \
+    --exclude=db \
+    -f tags \
+    app lib config packages vendor/gems &) 2>/dev/null
+
+  # Add project Ruby to shell PATH (only if project Ruby exists)
+  if [[ -n "$RUBY_SHA" && -x "$PROJECT_RUBY_BIN/ruby" ]]; then
+    RUBY_PROFILE_MARKER="# dotfiles: Ruby PATH for $RUBY_REPO"
+    if ! grep -q "$RUBY_PROFILE_MARKER" "$HOME/.bashrc" 2>/dev/null; then
+      echo "    Adding project Ruby to shell PATH..."
+      cat >> "$HOME/.bashrc" <<BASHEOF
+
+$RUBY_PROFILE_MARKER
+if [ -d "$RUBY_REPO" ]; then
+  export RAILS_ROOT="$RUBY_REPO"
+  RUBY_SHA=\$("\$RAILS_ROOT/config/ruby-version")
+  export PATH="\$RAILS_ROOT/vendor/ruby/\$RUBY_SHA/bin:\$RAILS_ROOT/bin:\$PATH"
+fi
+BASHEOF
+    fi
+  fi
+
+  echo "    Ruby development setup complete."
+else
+  echo "==> Not a Ruby repo — skipping Ruby development setup"
+fi
 
 # --- Neovim config (LazyVim) ---
 echo "==> Setting up Neovim config (LazyVim)..."
@@ -163,23 +198,6 @@ fi
 # Install tmux plugins non-interactively
 echo "==> Installing tmux plugins via TPM..."
 "$HOME/.tmux/plugins/tpm/bin/install_plugins" || true
-
-# --- Shell environment for github/github Ruby ---
-RUBY_PROFILE_MARKER="# dotfiles: github/github Ruby PATH"
-if ! grep -q "$RUBY_PROFILE_MARKER" "$HOME/.bashrc" 2>/dev/null; then
-  echo "==> Adding github/github Ruby to shell PATH..."
-  cat >> "$HOME/.bashrc" <<'BASHEOF'
-
-# dotfiles: github/github Ruby PATH
-if [ -d "/workspaces/github" ]; then
-  export RAILS_ROOT="/workspaces/github"
-  RUBY_SHA=$("$RAILS_ROOT/config/ruby-version")
-  export PATH="$RAILS_ROOT/vendor/ruby/$RUBY_SHA/bin:$RAILS_ROOT/bin:$PATH"
-fi
-BASHEOF
-else
-  echo "==> Ruby PATH already in .bashrc"
-fi
 
 echo ""
 echo "✅ Codespace dotfiles setup complete!"
