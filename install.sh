@@ -87,6 +87,15 @@ else
   echo "==> ripgrep already installed"
 fi
 
+# --- Rust/Cargo (needed for tree-sitter CLI) ---
+if ! command -v cargo &>/dev/null; then
+  echo "==> Installing Rust via rustup..."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  source "$HOME/.cargo/env"
+else
+  echo "==> Rust/Cargo already installed"
+fi
+
 # --- tree-sitter CLI (needed by nvim-treesitter; mason's binary requires newer glibc) ---
 if ! command -v tree-sitter &>/dev/null; then
   echo "==> Installing tree-sitter CLI via cargo (this may take a few minutes)..."
@@ -181,6 +190,10 @@ fi
 mkdir -p "$HOME/.config"
 cp -r "${DOTFILES_DIR}/.config/nvim" "$HOME/.config/nvim"
 
+# Pre-install LazyVim plugins so nvim is ready on first open
+echo "==> Pre-installing LazyVim plugins (headless)..."
+nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+
 # --- tmux config ---
 echo "==> Setting up tmux config (Codespace variant)..."
 if [ -f "${DOTFILES_DIR}/.tmux.codespace.conf" ]; then
@@ -201,5 +214,5 @@ echo "==> Installing tmux plugins via TPM..."
 
 echo ""
 echo "✅ Codespace dotfiles setup complete!"
-echo "   - Neovim + LazyVim: run 'nvim' (plugins install on first launch)"
+echo "   - Neovim + LazyVim: ready to use"
 echo "   - tmux: run 'tmux' to start a session"
