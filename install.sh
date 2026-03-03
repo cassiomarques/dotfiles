@@ -17,7 +17,7 @@ echo "==> Running Codespace dotfiles installer from ${DOTFILES_DIR}..."
 # Add new entries to enable Ruby tooling for other Codespace repos.
 RUBY_REPOS=(
   /workspaces/github
-  # /workspaces/another-ruby-repo
+  /workspaces/sparkles
 )
 
 RUBY_REPO=""
@@ -40,8 +40,8 @@ if command -v nvim &>/dev/null; then
   nvim_version=$(nvim --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+' | head -1)
   nvim_major=$(echo "$nvim_version" | cut -d. -f1)
   nvim_minor=$(echo "$nvim_version" | cut -d. -f2)
-  if [ "$nvim_major" -gt "$NVIM_REQUIRED_MAJOR" ] 2>/dev/null || \
-     { [ "$nvim_major" -eq "$NVIM_REQUIRED_MAJOR" ] && [ "$nvim_minor" -ge "$NVIM_REQUIRED_MINOR" ]; } 2>/dev/null; then
+  if [ "$nvim_major" -gt "$NVIM_REQUIRED_MAJOR" ] 2>/dev/null ||
+    { [ "$nvim_major" -eq "$NVIM_REQUIRED_MAJOR" ] && [ "$nvim_minor" -ge "$NVIM_REQUIRED_MINOR" ]; } 2>/dev/null; then
     echo "==> Neovim already meets requirement (>= ${NVIM_REQUIRED_MAJOR}.${NVIM_REQUIRED_MINOR}): $(nvim --version | head -1)"
     needs_nvim_install=false
   else
@@ -115,7 +115,7 @@ if [[ -n "$RUBY_REPO" ]]; then
   echo "    Installing ruby-lsp gem..."
   PATH="$RUBY_BIN:$PATH" gem install ruby-lsp --no-document
   # Wrapper script so ruby-lsp uses the correct Ruby regardless of shell PATH
-  sudo tee /usr/local/bin/ruby-lsp > /dev/null <<WRAPPER
+  sudo tee /usr/local/bin/ruby-lsp >/dev/null <<WRAPPER
 #!/bin/bash
 RUBY_SHA=\$($RUBY_REPO/config/ruby-version 2>/dev/null || true)
 RBIN="$RUBY_REPO/vendor/ruby/\$RUBY_SHA/bin"
@@ -154,7 +154,7 @@ WRAPPER
     RUBY_PROFILE_MARKER="# dotfiles: Ruby PATH for $RUBY_REPO"
     if ! grep -q "$RUBY_PROFILE_MARKER" "$HOME/.bashrc" 2>/dev/null; then
       echo "    Adding project Ruby to shell PATH..."
-      cat >> "$HOME/.bashrc" <<BASHEOF
+      cat >>"$HOME/.bashrc" <<BASHEOF
 
 $RUBY_PROFILE_MARKER
 if [ -d "$RUBY_REPO" ]; then
