@@ -1,6 +1,10 @@
 return {
   "saghen/blink.cmp",
   opts = function(_, opts)
+    -- Use Lua fuzzy matching (pre-built Rust binary needs glibc 2.32+, Codespace has 2.31)
+    opts.fuzzy = opts.fuzzy or {}
+    opts.fuzzy.implementation = "lua"
+
     opts.completion = opts.completion or {}
     opts.completion.trigger = {
       show_on_insert = false,

@@ -29,6 +29,11 @@ return {
               },
             },
           },
+          -- Reset tagfunc so Ctrl+] uses ctags directly instead of trying
+          -- LSP workspace/symbol (which ruby-lsp doesn't support).
+          on_attach = function(client, bufnr)
+            vim.bo[bufnr].tagfunc = ""
+          end,
         },
         -- Disable solargraph — ruby-lsp is the primary Ruby LSP
         solargraph = { enabled = false },
