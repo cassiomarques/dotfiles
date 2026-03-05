@@ -87,6 +87,14 @@ else
   echo "==> ripgrep already installed"
 fi
 
+# --- tig (text-mode interface for git) ---
+if ! command -v tig &>/dev/null; then
+  echo "==> Installing tig..."
+  sudo apt-get install -y tig
+else
+  echo "==> tig already installed: $(tig --version)"
+fi
+
 # --- Rust/Cargo (needed for tree-sitter CLI) ---
 if ! command -v cargo &>/dev/null; then
   echo "==> Installing Rust via rustup..."
@@ -194,6 +202,12 @@ cp -r "${DOTFILES_DIR}/.config/nvim" "$HOME/.config/nvim"
 echo "==> Pre-installing LazyVim plugins (headless)..."
 nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
 
+# --- tig config ---
+echo "==> Setting up tig config..."
+if [ -f "${DOTFILES_DIR}/.tigrc" ]; then
+  cp "${DOTFILES_DIR}/.tigrc" "$HOME/.tigrc"
+fi
+
 # --- tmux config ---
 echo "==> Setting up tmux config (Codespace variant)..."
 if [ -f "${DOTFILES_DIR}/.tmux.codespace.conf" ]; then
@@ -216,3 +230,4 @@ echo ""
 echo "✅ Codespace dotfiles setup complete!"
 echo "   - Neovim + LazyVim: ready to use"
 echo "   - tmux: run 'tmux' to start a session"
+echo "   - tig: run 'tig' for a text-mode git interface"
