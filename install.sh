@@ -208,6 +208,24 @@ if [ -f "${DOTFILES_DIR}/.tigrc" ]; then
   cp "${DOTFILES_DIR}/.tigrc" "$HOME/.tigrc"
 fi
 
+# --- Shell aliases ---
+echo "==> Setting up shell aliases..."
+if [ -f "${DOTFILES_DIR}/aliases.sh" ]; then
+  ALIASES_MARKER="# dotfiles: shell aliases"
+  if ! grep -q "$ALIASES_MARKER" "$HOME/.bashrc" 2>/dev/null; then
+    cat >>"$HOME/.bashrc" <<BASHEOF
+
+$ALIASES_MARKER
+if [ -f "${DOTFILES_DIR}/aliases.sh" ]; then
+  source "${DOTFILES_DIR}/aliases.sh"
+fi
+BASHEOF
+    echo "    Added aliases.sh sourcing to ~/.bashrc"
+  else
+    echo "    aliases.sh already sourced in ~/.bashrc"
+  fi
+fi
+
 # --- tmux config ---
 echo "==> Setting up tmux config (Codespace variant)..."
 if [ -f "${DOTFILES_DIR}/.tmux.codespace.conf" ]; then
