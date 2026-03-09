@@ -13,6 +13,29 @@ DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "==> Running Codespace dotfiles installer from ${DOTFILES_DIR}..."
 
+# --- Preserve Codespace git settings ---
+# Codespaces writes essential git config (gpg.program, credential.helper,
+# user identity) to /etc/gitconfig and/or ~/.gitconfig. Some repos (e.g.,
+# github/github) use a vendored git that only reads ~/.gitconfig, not
+# /etc/gitconfig. Ensure these settings survive dotfiles installation.
+echo "==> Preserving Codespace git configuration..."
+if [ -f /etc/gitconfig ]; then
+  cs_gpg_program=$(git config -f /etc/gitconfig --get gpg.program 2>/dev/null || true)
+  cs_credential_helper=$(git config -f /etc/gitconfig --get credential.helper 2>/dev/null || true)
+  cs_user_name=$(git config -f /etc/gitconfig --get user.name 2>/dev/null || true)
+  cs_user_email=$(git config -f /etc/gitconfig --get user.email 2>/dev/null || true)
+
+  [[ -n "$cs_gpg_program" ]] && git config --global gpg.program "$cs_gpg_program"
+  [[ -n "$cs_credential_helper" ]] && git config --global credential.helper "$cs_credential_helper"
+  [[ -n "$cs_user_name" ]] && git config --global user.name "$cs_user_name"
+  [[ -n "$cs_user_email" ]] && git config --global user.email "$cs_user_email"
+
+  echo "    gpg.program=${cs_gpg_program:-<not set>}"
+  echo "    credential.helper=${cs_credential_helper:-<not set>}"
+  echo "    user.name=${cs_user_name:-<not set>}"
+  echo "    user.email=${cs_user_email:-<not set>}"
+fi
+
 # Repositories that need Ruby development setup (ruby-lsp, ctags, Ruby PATH).
 # Add new entries to enable Ruby tooling for other Codespace repos.
 RUBY_REPOS=(
