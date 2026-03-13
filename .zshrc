@@ -1,3 +1,11 @@
+if [[ "$CODESPACES" == "true" ]] && [[ ! -f "$HOME/.dotfiles_ready" ]]; then
+  printf "⏳ Dotfiles still installing"
+  while [[ ! -f "$HOME/.dotfiles_ready" ]]; do printf "."; sleep 1; done
+  echo ""
+  echo "✅ Dotfiles ready!"
+  exec "$SHELL" -l
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
