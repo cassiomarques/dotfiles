@@ -54,6 +54,29 @@ done
 # --- Update package index once for all apt installs below ---
 sudo apt-get update -qq
 
+# --- Zsh + Oh My Zsh (set as default shell) ---
+if ! command -v zsh &>/dev/null; then
+  echo "==> Installing zsh..."
+  sudo apt-get install -y zsh
+else
+  echo "==> zsh already installed: $(zsh --version)"
+fi
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "==> Installing Oh My Zsh..."
+  # RUNZSH=no  — don't launch zsh after install
+  # CHSH=no    — we handle chsh ourselves below
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+else
+  echo "==> Oh My Zsh already installed"
+fi
+
+echo "==> Setting zsh as default shell..."
+sudo chsh -s "$(command -v zsh)" "$(whoami)" 2>/dev/null || true
+
+echo "==> Copying .zshrc..."
+cp "${DOTFILES_DIR}/.zshrc" "$HOME/.zshrc"
+
 # --- Neovim (nightly/prerelease via AppImage — required for LazyVim 0.12+ features) ---
 NVIM_REQUIRED_MAJOR=0
 NVIM_REQUIRED_MINOR=12
@@ -192,9 +215,9 @@ WRAPPER
   # Add project Ruby to shell PATH (only if project Ruby exists)
   if [[ -n "$RUBY_SHA" && -x "$PROJECT_RUBY_BIN/ruby" ]]; then
     RUBY_PROFILE_MARKER="# dotfiles: Ruby PATH for $RUBY_REPO"
-    if ! grep -q "$RUBY_PROFILE_MARKER" "$HOME/.bashrc" 2>/dev/null; then
+    if ! grep -q "$RUBY_PROFILE_MARKER" "$HOME/.zshrc" 2>/dev/null; then
       echo "    Adding project Ruby to shell PATH..."
-      cat >>"$HOME/.bashrc" <<BASHEOF
+      cat >>"$HOME/.zshrc" <<ZSHEOF
 
 $RUBY_PROFILE_MARKER
 if [ -d "$RUBY_REPO" ]; then
@@ -202,7 +225,7 @@ if [ -d "$RUBY_REPO" ]; then
   RUBY_SHA=\$("\$RAILS_ROOT/config/ruby-version")
   export PATH="\$RAILS_ROOT/vendor/ruby/\$RUBY_SHA/bin:\$RAILS_ROOT/bin:\$PATH"
 fi
-BASHEOF
+ZSHEOF
     fi
   fi
 
@@ -235,17 +258,17 @@ fi
 echo "==> Setting up shell aliases..."
 if [ -f "${DOTFILES_DIR}/aliases.sh" ]; then
   ALIASES_MARKER="# dotfiles: shell aliases"
-  if ! grep -q "$ALIASES_MARKER" "$HOME/.bashrc" 2>/dev/null; then
-    cat >>"$HOME/.bashrc" <<BASHEOF
+  if ! grep -q "$ALIASES_MARKER" "$HOME/.zshrc" 2>/dev/null; then
+    cat >>"$HOME/.zshrc" <<ZSHEOF
 
 $ALIASES_MARKER
 if [ -f "${DOTFILES_DIR}/aliases.sh" ]; then
   source "${DOTFILES_DIR}/aliases.sh"
 fi
-BASHEOF
-    echo "    Added aliases.sh sourcing to ~/.bashrc"
+ZSHEOF
+    echo "    Added aliases.sh sourcing to ~/.zshrc"
   else
-    echo "    aliases.sh already sourced in ~/.bashrc"
+    echo "    aliases.sh already sourced in ~/.zshrc"
   fi
 fi
 
@@ -267,8 +290,11 @@ fi
 echo "==> Installing tmux plugins via TPM..."
 "$HOME/.tmux/plugins/tpm/bin/install_plugins" || true
 
+touch "$HOME/.dotfiles_ready"
+
 echo ""
 echo "✅ Codespace dotfiles setup complete!"
 echo "   - Neovim + LazyVim: ready to use"
+echo "   - zsh + Oh My Zsh: set as default shell"
 echo "   - tmux: run 'tmux' to start a session"
 echo "   - tig: run 'tig' for a text-mode git interface"
