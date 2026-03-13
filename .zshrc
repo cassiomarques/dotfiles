@@ -81,7 +81,11 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump)
+if [[ "$CODESPACES" == "true" ]]; then
+  plugins=(git)
+else
+  plugins=(git autojump)
+fi
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
@@ -128,7 +132,9 @@ alias asdf="/opt/homebrew/bin/asdf"
 alias mt="mix test"
 
 # Github Copilot CLI alias
-eval "$(gh copilot alias -- zsh)"
+if [[ "$CODESPACES" != "true" ]]; then
+  eval "$(gh copilot alias -- zsh)"
+fi
 
 # Cursor word navigation that does not conflict with macos "workspace swapping" (ctrl-arrow)
 # This uses ALT + arrow
@@ -172,4 +178,6 @@ fi
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-eval "$(direnv hook zsh)"
+if [[ "$CODESPACES" != "true" ]]; then
+  eval "$(direnv hook zsh)"
+fi
